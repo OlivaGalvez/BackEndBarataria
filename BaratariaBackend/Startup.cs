@@ -28,6 +28,7 @@ namespace BaratariaBackend
             //services.AddRazorPages();
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
             services.AddControllers();
+            services.AddSwaggerGen();
 
         }
 
@@ -38,6 +39,21 @@ namespace BaratariaBackend
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+
+                c.SupportedSubmitMethods();
+
+                //Para servir la interfaz de usuario de Swagger en la raíz de la aplicación
+
+                c.RoutePrefix = string.Empty;
+
+            });
+
             //else
             //{
             //    app.UseExceptionHandler("/Error");
