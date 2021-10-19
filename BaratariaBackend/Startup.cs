@@ -27,6 +27,11 @@ namespace BaratariaBackend
         {
             //services.AddRazorPages();
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
+
+            //Habilitar CORS para controlar las solicitudes entre orígenes (necesario para el FrontEnd)
+            services.AddCors(options => options.AddPolicy("AllowWebApp",
+                    builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
             services.AddControllers();
             services.AddSwaggerGen();
 
@@ -40,16 +45,16 @@ namespace BaratariaBackend
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("AllowWebApp");
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
 
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-
                 c.SupportedSubmitMethods();
 
                 //Para servir la interfaz de usuario de Swagger en la raíz de la aplicación
-
                 c.RoutePrefix = string.Empty;
 
             });
@@ -61,9 +66,10 @@ namespace BaratariaBackend
             //    app.UseHsts();
             //}
 
-            app.UseHttpsRedirection();
+            app.UseDefaultFiles();
             app.UseStaticFiles();
 
+            app.UseHttpsRedirection();
             app.UseRouting();
 
             app.UseAuthorization();
