@@ -15,6 +15,7 @@ namespace BaratariaBackend.Models.Context
 
         }
 
+        public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Socio> Socios { get; set; }
 
     }
