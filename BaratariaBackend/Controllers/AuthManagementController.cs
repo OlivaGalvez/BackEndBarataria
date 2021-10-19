@@ -37,9 +37,9 @@ namespace BaratariaBackend.Controllers
         {
             if (ModelState.IsValid)
             {
-                var existingUser = await _userManager.FindByEmailAsync(user.Email);
+                var existeUsuario = await _userManager.FindByEmailAsync(user.Email);
 
-                if (existingUser != null)
+                if (existeUsuario != null)
                 {
                     return BadRequest(new RegistrationResponse()
                     {
@@ -55,26 +55,20 @@ namespace BaratariaBackend.Controllers
                     UserName = user.Nombre,
                     Email = user.Email
                 };
-                var isCreated = await _userManager.CreateAsync(nuevoUsuario, user.Contrasenia);
 
-                if (isCreated.Succeeded)
+                var usuarioCreado = await _userManager.CreateAsync(nuevoUsuario, user.Contrasenia);
+
+                if (usuarioCreado.Succeeded)
                 {
-
                     //Añadir Rol
-                    var currentUser = await _userManager.FindByEmailAsync(user.Email);
+                    var obtenerUsuario = await _userManager.FindByEmailAsync(user.Email);
 
                     bool existingRole = await _roleManager.RoleExistsAsync(user.Rol);
                     if (existingRole)
                     {
-                        var roleresult = await _userManager.AddToRoleAsync(currentUser, user.Rol);
+                        var resultadoRol = await _userManager.AddToRoleAsync(obtenerUsuario, user.Rol);
 
-                        var jwtToken = GenerarJwtToken(nuevoUsuario);
-
-                        return Ok(new RegistrationResponse()
-                        {
-                            Success = true,
-                            Token = jwtToken
-                        });
+                        return Ok(await GenerarJwtToken(nuevoUsuario));
                     }
 
                     return BadRequest(new RegistrationResponse()
@@ -90,7 +84,7 @@ namespace BaratariaBackend.Controllers
                 {
                     return BadRequest(new RegistrationResponse()
                     {
-                        Errors = isCreated.Errors.Select(x => x.Description).ToList(),
+                        Errors = usuarioCreado.Errors.Select(x => x.Description).ToList(),
                         Success = false
                     });
                 }
@@ -112,9 +106,9 @@ namespace BaratariaBackend.Controllers
         {
             if (ModelState.IsValid)
             {
-                var existingUser = await _userManager.FindByEmailAsync(user.Email);
+                var usuarioExiste = await _userManager.FindByEmailAsync(user.Email);
 
-                if (existingUser == null)
+                if (usuarioExiste == null)
                 {
                     return BadRequest(new RegistrationResponse()
                     {
@@ -125,9 +119,9 @@ namespace BaratariaBackend.Controllers
                     });
                 }
 
-                var isCorrect = await _userManager.CheckPasswordAsync(existingUser, user.Contrasenia);
+                var usuarioEsCorrecto = await _userManager.CheckPasswordAsync(usuarioExiste, user.Contrasenia);
 
-                if (!isCorrect)
+                if (!usuarioEsCorrecto)
                 {
                     return BadRequest(new RegistrationResponse()
                     {
@@ -138,13 +132,7 @@ namespace BaratariaBackend.Controllers
                     });
                 }
 
-                var jwtToken = GenerarJwtToken(existingUser);
-
-                return Ok(new RegistrationResponse()
-                {
-                    Success = true,
-                    Token = jwtToken
-                });
+                return Ok(await GenerarJwtToken(usuarioExiste));
             }
 
             return BadRequest(new RegistrationResponse()
@@ -156,7 +144,7 @@ namespace BaratariaBackend.Controllers
             });
         }
 
-        private string GenerarJwtToken(IdentityUser user)
+        private async Task<AuthResult> GenerarJwtToken(IdentityUser user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
 
@@ -171,14 +159,18 @@ namespace BaratariaBackend.Controllers
                     new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 }),
-                Expires = DateTime.UtcNow.AddHours(6),
+                Expires = DateTime.UtcNow.AddMinutes(15),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
             var token = jwtTokenHandler.CreateToken(tokenDescriptor);
             var jwtToken = jwtTokenHandler.WriteToken(token);
 
-            return jwtToken;
+            return new AuthResult()
+            {
+                Token = jwtToken,
+                Success = true
+            };
         }
     }
 }
