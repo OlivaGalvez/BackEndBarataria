@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Text;
 
 namespace BaratariaBackend
@@ -27,29 +28,37 @@ namespace BaratariaBackend
         {
 
             services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
-            services.AddAuthentication(options =>
+
+            var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
+
+            var tokenValidationParameters = new TokenValidationParameters
             {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                RequireExpirationTime = false,
+
+                //Obligatorio cuando el tiempo del token es menor de 5 min
+                ClockSkew = TimeSpan.Zero
+            };
+
+            services.AddSingleton(tokenValidationParameters);
+
+            services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(jwt => {
-                var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
-
                 jwt.SaveToken = true;
-                jwt.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    RequireExpirationTime = false
-                };
+                jwt.TokenValidationParameters = tokenValidationParameters;
             });
 
             services.AddDefaultIdentity<IdentityUser>(options =>
                options.SignIn.RequireConfirmedAccount = true)
+               .AddRoles<IdentityRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>();
 
 

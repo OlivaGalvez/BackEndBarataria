@@ -19,11 +19,14 @@ namespace BaratariaBackend.Controllers
     [ApiController]
     public class AuthManagementController : ControllerBase
     {
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly JwtConfig _jwtConfig;
 
-        public AuthManagementController(UserManager<IdentityUser> userManager, IOptionsMonitor<JwtConfig> optionsMonitor)
+        public AuthManagementController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, 
+            IOptionsMonitor<JwtConfig> optionsMonitor)
         {
+            _roleManager = roleManager;
             _userManager = userManager;
             _jwtConfig = optionsMonitor.CurrentValue;
         }
@@ -56,13 +59,32 @@ namespace BaratariaBackend.Controllers
 
                 if (isCreated.Succeeded)
                 {
-                    var jwtToken = GenerarJwtToken(nuevoUsuario);
 
-                    return Ok(new RegistrationResponse()
+                    //Añadir Rol
+                    var currentUser = await _userManager.FindByEmailAsync(user.Email);
+
+                    bool existingRole = await _roleManager.RoleExistsAsync(user.Rol);
+                    if (existingRole)
                     {
-                        Success = true,
-                        Token = jwtToken
+                        var roleresult = await _userManager.AddToRoleAsync(currentUser, user.Rol);
+
+                        var jwtToken = GenerarJwtToken(nuevoUsuario);
+
+                        return Ok(new RegistrationResponse()
+                        {
+                            Success = true,
+                            Token = jwtToken
+                        });
+                    }
+
+                    return BadRequest(new RegistrationResponse()
+                    {
+                        Errors = new List<string>() {
+                            "El rol añadido no existe"
+                        },
+                        Success = false
                     });
+
                 }
                 else
                 {

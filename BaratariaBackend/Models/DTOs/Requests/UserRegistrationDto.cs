@@ -15,5 +15,7 @@ namespace BaratariaBackend.Models.DTOs.Requests
         public string Email { get; set; }
         [Required]
         public string Contrasenia { get; set; }
+        [Required]
+        public string Rol { get; set; }
     }
 }
