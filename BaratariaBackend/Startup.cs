@@ -46,6 +46,7 @@ namespace BaratariaBackend
 
             services.AddSingleton(tokenValidationParameters);
 
+            // CONFIGURACIÓN DEL SERVICIO DE AUTENTICACIÓN JWT
             services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;

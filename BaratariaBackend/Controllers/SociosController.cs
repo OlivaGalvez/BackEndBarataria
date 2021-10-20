@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BaratariaBackend.Models.Context;
 using BaratariaBackend.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BaratariaBackend.Controllers
 {
+    [Authorize(Roles = "Administrador")]
     [Route("api/[controller]")]
     [ApiController]
     public class SociosController : ControllerBase

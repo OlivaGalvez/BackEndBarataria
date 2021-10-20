@@ -185,22 +185,32 @@ namespace BaratariaBackend.Controllers
 
         private async Task<AuthResult> GenerarJwtToken(IdentityUser user)
         {
+            var roles = await _userManager.GetRolesAsync(user);
+
             var jwtTokenHandler = new JwtSecurityTokenHandler();
 
             var key = Encoding.ASCII.GetBytes(_jwtConfig.Secret);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim("Id", user.Id),
-                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                }),
+                Subject = new ClaimsIdentity(getClaims()),
                 Expires = DateTime.UtcNow.AddMinutes(15),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
+
+            Claim[] getClaims()
+            {
+                List<Claim> claims = new List<Claim>();
+                claims.Add(new Claim("Id", user.Id));
+                claims.Add(new Claim(JwtRegisteredClaimNames.Email, user.Email));
+                claims.Add(new Claim(JwtRegisteredClaimNames.Sub, user.Email));
+                foreach (var item in roles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, item));
+                }
+                claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+                return claims.ToArray();
+            }
 
             var token = jwtTokenHandler.CreateToken(tokenDescriptor);
             var jwtToken = jwtTokenHandler.WriteToken(token);
@@ -223,7 +233,8 @@ namespace BaratariaBackend.Controllers
             {
                 Token = jwtToken,
                 Success = true,
-                RefreshToken = refreshToken.Token
+                RefreshToken = refreshToken.Token,
+                Roles = roles
             };
         }
 
