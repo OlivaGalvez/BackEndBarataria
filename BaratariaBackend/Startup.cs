@@ -112,6 +112,8 @@ namespace BaratariaBackend
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseDeveloperExceptionPage();
+
             app.UseEndpoints(endpoints =>
             {
                 //endpoints.MapRazorPages();

@@ -23,8 +23,6 @@ C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin
 C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.AspNetCore.Connections.Abstractions.dll
 C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.AspNetCore.CookiePolicy.dll
 C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.AspNetCore.Cors.dll
-C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.AspNetCore.Cryptography.Internal.dll
-C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
 C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.AspNetCore.DataProtection.Abstractions.dll
 C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.AspNetCore.DataProtection.dll
 C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.AspNetCore.DataProtection.Extensions.dll
@@ -103,14 +101,11 @@ C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin
 C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.Extensions.Diagnostics.HealthChecks.dll
 C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.Extensions.FileProviders.Abstractions.dll
 C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.Extensions.FileProviders.Composite.dll
-C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.Extensions.FileProviders.Embedded.dll
 C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.Extensions.FileProviders.Physical.dll
 C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.Extensions.FileSystemGlobbing.dll
 C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.Extensions.Hosting.Abstractions.dll
 C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.Extensions.Hosting.dll
 C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.Extensions.Http.dll
-C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.Extensions.Identity.Core.dll
-C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.Extensions.Identity.Stores.dll
 C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.Extensions.Localization.Abstractions.dll
 C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.Extensions.Localization.dll
 C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\refs\Microsoft.Extensions.Logging.Abstractions.dll
@@ -416,3 +411,13 @@ C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\obj
 C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\obj\Release\net5.0\ref\BaratariaBackend.dll
 C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\obj\Release\net5.0\BaratariaBackend.pdb
 C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\obj\Release\net5.0\BaratariaBackend.genruntimeconfig.cache
+C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\BaratariaBackend.StaticWebAssets.xml
+C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\Microsoft.AspNetCore.Identity.UI.Views.V4.dll
+C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\Microsoft.AspNetCore.Identity.UI.dll
+C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\Microsoft.Extensions.FileProviders.Embedded.dll
+C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\Administrador\Documents\Barataria\BaratariaBackend\BaratariaBackend\bin\Release\net5.0\Microsoft.Extensions.Identity.Stores.dll
