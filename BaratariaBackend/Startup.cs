@@ -27,44 +27,12 @@ namespace BaratariaBackend
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
 
-            var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
-
-            var tokenValidationParameters = new TokenValidationParameters
+            services.AddMvc();
+            services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(options =>
             {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ValidateLifetime = true,
-                RequireExpirationTime = false,
-
-                //Obligatorio cuando el tiempo del token es menor de 5 min
-                ClockSkew = TimeSpan.Zero
-            };
-
-            services.AddSingleton(tokenValidationParameters);
-
-            // CONFIGURACIÓN DEL SERVICIO DE AUTENTICACIÓN JWT
-            services.AddAuthentication(options => {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(jwt => {
-                jwt.SaveToken = true;
-                jwt.TokenValidationParameters = tokenValidationParameters;
+                options.UseNpgsql(Configuration.GetConnectionString("DevConnection"));
             });
-
-            services.AddDefaultIdentity<IdentityUser>(options =>
-               options.SignIn.RequireConfirmedAccount = true)
-               .AddRoles<IdentityRole>()
-               .AddEntityFrameworkStores<ApplicationDbContext>();
-
-
-            //services.AddRazorPages();
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
 
             //Habilitar CORS para controlar las solicitudes entre orígenes (necesario para el FrontEnd)
             services.AddCors(options => options.AddPolicy("AllowWebApp",
@@ -97,12 +65,6 @@ namespace BaratariaBackend
 
             });
 
-            //else
-            //{
-            //    app.UseExceptionHandler("/Error");
-            //    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            //    app.UseHsts();
-            //}
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
@@ -117,7 +79,6 @@ namespace BaratariaBackend
 
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapRazorPages();
                 endpoints.MapControllers();
             });
         }

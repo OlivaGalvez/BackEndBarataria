@@ -8,14 +8,12 @@ using System.Threading.Tasks;
 
 namespace BaratariaBackend.Models.Context
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
         }
-
-        public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Socio> Socios { get; set; }
 
     }

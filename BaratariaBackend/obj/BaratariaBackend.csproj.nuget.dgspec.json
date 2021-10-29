@@ -1,27 +1,45 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Administrador\\Documents\\Barataria\\BaratariaBackend\\BaratariaBackend\\BaratariaBackend.csproj": {}
+    "C:\\Users\\U179240\\Documents\\Barataria\\BaratariaRepo\\BaratariaBackend\\BaratariaBackend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Administrador\\Documents\\Barataria\\BaratariaBackend\\BaratariaBackend\\BaratariaBackend.csproj": {
+    "C:\\Users\\U179240\\Documents\\Barataria\\BaratariaRepo\\BaratariaBackend\\BaratariaBackend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Administrador\\Documents\\Barataria\\BaratariaBackend\\BaratariaBackend\\BaratariaBackend.csproj",
+        "projectUniqueName": "C:\\Users\\U179240\\Documents\\Barataria\\BaratariaRepo\\BaratariaBackend\\BaratariaBackend.csproj",
         "projectName": "BaratariaBackend",
-        "projectPath": "C:\\Users\\Administrador\\Documents\\Barataria\\BaratariaBackend\\BaratariaBackend\\BaratariaBackend.csproj",
-        "packagesPath": "C:\\Users\\Administrador\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Administrador\\Documents\\Barataria\\BaratariaBackend\\BaratariaBackend\\obj\\",
+        "projectPath": "C:\\Users\\U179240\\Documents\\Barataria\\BaratariaRepo\\BaratariaBackend\\BaratariaBackend.csproj",
+        "packagesPath": "C:\\Users\\U179240\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\U179240\\Documents\\Barataria\\BaratariaRepo\\BaratariaBackend\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\DevExpress 20.2\\Components\\Offline Packages",
+          "C:\\Program Files (x86)\\DevExpress 21.1\\Components\\Offline Packages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Administrador\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\U179240\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 18.1.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 18.2.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 19.2.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 20.1.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 20.2.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 21.1.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\DevExpress 18.1\\Components\\System\\Components\\Packages": {},
+          "C:\\Program Files (x86)\\DevExpress 18.2\\Components\\System\\Components\\Packages": {},
+          "C:\\Program Files (x86)\\DevExpress 19.2\\Components\\System\\Components\\Packages": {},
+          "C:\\Program Files (x86)\\DevExpress 20.1\\Components\\System\\Components\\Packages": {},
+          "C:\\Program Files (x86)\\DevExpress 20.2\\Components\\System\\Components\\Packages": {},
+          "C:\\Program Files (x86)\\DevExpress 21.1\\Components\\System\\Components\\Packages": {},
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "http://yoda3/nugetserver/nuget": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -74,6 +92,10 @@
               "target": "Package",
               "version": "[5.0.2, )"
             },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[5.0.10, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.2, )"
@@ -97,7 +119,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }
