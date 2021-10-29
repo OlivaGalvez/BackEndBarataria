@@ -12,7 +12,8 @@ using BaratariaBackend.Configuration;
 
 namespace BaratariaBackend.Controllers
 {
-    [Authorize(Roles = Role.Admin)]
+    //[Authorize(Roles = Role.Admin)]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SociosController : ControllerBase
