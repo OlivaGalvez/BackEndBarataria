@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BaratariaBackend.Models.Context;
 using BaratariaBackend.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
-using BaratariaBackend.Configuration;
 
 namespace BaratariaBackend.Controllers
 {

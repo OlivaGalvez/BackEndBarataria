@@ -7,6 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+
 namespace BaratariaBackend
 {
     public class Startup
@@ -14,11 +17,9 @@ namespace BaratariaBackend
         public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
             Configuration = configuration;
-            Environment = env;
         }
 
         public IConfiguration Configuration { get; }
-        public IWebHostEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -27,39 +28,24 @@ namespace BaratariaBackend
 
             services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(o =>
-            {
-                o.Authority = Configuration["Jwt:Authority"];
-                o.Audience = Configuration["Jwt:Audience"];
-                o.RequireHttpsMetadata = false;
+           .AddCookie()
+           .AddOpenIdConnect(options =>
+           {
+               options.Authority = Configuration["Authentication:oidc:Authority"];
+               options.ClientId = Configuration["Authentication:oidc:ClientId"];
+               options.ClientSecret = Configuration["Authentication:oidc:ClientSecret"];
+               options.RequireHttpsMetadata = false;
+               options.GetClaimsFromUserInfoEndpoint = true;
+               options.SaveTokens = true;
+               options.RemoteSignOutPath = "/SignOut";
+               options.SignedOutRedirectUri = "Redirect-here";
+               options.ResponseType = "code";
 
-                o.Events = new JwtBearerEvents()
-                {
-                    OnAuthenticationFailed = c =>
-                    {
-                        c.NoResult();
-
-                        c.Response.StatusCode = 500;
-                        c.Response.ContentType = "text/plain";
-
-                        if (Environment.IsDevelopment())
-                        {
-                            return c.Response.WriteAsync(c.Exception.ToString());
-                        }
-
-                        return c.Response.WriteAsync("An error occured processing your authentication.");
-                    }
-                };
-            });
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Administrator", policy => policy.RequireClaim("user_roles", "[Administrator]"));
-            });
+           });
 
             services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(options =>
             {

@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "B+FBCG9IYRL0POBQ2yd1R5AXMHivg7kE2fPE7nVbFfnVfhXnbqrQrOumjym+qN3whpGb7nrMmULapKL6cM/piQ==",
+  "dgSpecHash": "/XhClJF1SG16kLoH2RiMJtjbey8IaOxlgvKYgw34Ge6ysV1lxQFrmV9GDyB2WN4KqhFISxEa+hn4bcAR4XG8hQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\U179240\\Documents\\Barataria\\BaratariaRepo\\BaratariaBackend\\BaratariaBackend.csproj",
+  "projectFilePath": "C:\\Users\\U179240\\Documents\\BackEndBarataria\\BaratariaBackend\\BaratariaBackend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\U179240\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\U179240\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\5.0.11\\microsoft.aspnetcore.authentication.jwtbearer.5.0.11.nupkg.sha512",
+    "C:\\Users\\U179240\\.nuget\\packages\\microsoft.aspnetcore.authentication.openidconnect\\5.0.11\\microsoft.aspnetcore.authentication.openidconnect.5.0.11.nupkg.sha512",
     "C:\\Users\\U179240\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\5.0.11\\microsoft.aspnetcore.cryptography.internal.5.0.11.nupkg.sha512",
     "C:\\Users\\U179240\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\5.0.11\\microsoft.aspnetcore.cryptography.keyderivation.5.0.11.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
