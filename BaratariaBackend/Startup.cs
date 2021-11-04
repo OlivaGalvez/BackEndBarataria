@@ -9,6 +9,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.IdentityModel.Tokens;
+using System;
 
 namespace BaratariaBackend
 {
@@ -24,28 +26,34 @@ namespace BaratariaBackend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-
-            services.AddAuthentication(options =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
             {
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-            })
-           .AddCookie()
-           .AddOpenIdConnect(options =>
-           {
-               options.Authority = Configuration["Authentication:oidc:Authority"];
-               options.ClientId = Configuration["Authentication:oidc:ClientId"];
-               options.ClientSecret = Configuration["Authentication:oidc:ClientSecret"];
-               options.RequireHttpsMetadata = false;
-               options.GetClaimsFromUserInfoEndpoint = true;
-               options.SaveTokens = true;
-               options.RemoteSignOutPath = "/SignOut";
-               options.SignedOutRedirectUri = "Redirect-here";
-               options.ResponseType = "code";
 
-           });
+                options.Authority = Configuration["Authentication:Authority"];
+                options.Audience = Configuration["Authentication:Audience"];
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateAudience = false
+                };
+
+                options.Events = new JwtBearerEvents()
+                {
+                    OnAuthenticationFailed = c =>
+                    {
+                        c.NoResult();
+
+                        c.Response.StatusCode = 500;
+                        c.Response.ContentType = "text/plain";
+                        return c.Response.WriteAsync(c.Exception.ToString());
+                    }
+                };
+
+                options.RequireHttpsMetadata = false; //for test only!
+                options.SaveToken = true;
+                options.Validate();
+
+            });
 
             services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(options =>
             {
@@ -53,8 +61,17 @@ namespace BaratariaBackend
             });
 
             //Habilitar CORS para controlar las solicitudes entre orígenes (necesario para el FrontEnd)
-            services.AddCors(options => options.AddPolicy("AllowWebApp",
-                    builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+            //services.AddCors(options => options.AddPolicy("AllowWebApp",
+            //        builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder => builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                );
+            });
 
             services.AddControllers();
             services.AddSwaggerGen();
@@ -69,7 +86,10 @@ namespace BaratariaBackend
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors("AllowWebApp");
+            app.UseRouting();
+            app.UseCors();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -83,22 +103,11 @@ namespace BaratariaBackend
 
             });
 
-
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
-
-            app.UseHttpsRedirection();
-            app.UseRouting();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseDeveloperExceptionPage();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
         }
     }
 }
