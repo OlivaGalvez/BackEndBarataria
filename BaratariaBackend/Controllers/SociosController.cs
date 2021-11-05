@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BaratariaBackend.Controllers
 {
-    //[Authorize(Roles = Role.Admin)]
-    [Authorize]
+     [Authorize(Policy = "Administrador")]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SociosController : ControllerBase

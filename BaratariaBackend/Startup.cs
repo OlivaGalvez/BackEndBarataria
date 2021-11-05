@@ -7,16 +7,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.IdentityModel.Tokens;
-using System;
 
 namespace BaratariaBackend
 {
     public class Startup
     {
-        public Startup(IWebHostEnvironment env, IConfiguration configuration)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
@@ -55,14 +51,15 @@ namespace BaratariaBackend
 
             });
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Administrador", policy => policy.RequireClaim("member_of", "administrador"));
+            });
+
             services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseNpgsql(Configuration.GetConnectionString("DevConnection"));
             });
-
-            //Habilitar CORS para controlar las solicitudes entre orígenes (necesario para el FrontEnd)
-            //services.AddCors(options => options.AddPolicy("AllowWebApp",
-            //        builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
             services.AddCors(options =>
             {
@@ -100,7 +97,6 @@ namespace BaratariaBackend
 
                 //Para servir la interfaz de usuario de Swagger en la raíz de la aplicación
                 c.RoutePrefix = string.Empty;
-
             });
 
             app.UseEndpoints(endpoints =>
