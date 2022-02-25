@@ -3,15 +3,17 @@ using System;
 using BaratariaBackend.Models.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace BaratariaBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220225120545_Add entities Deporte y EnlacesDeporte")]
+    partial class AddentitiesDeporteyEnlacesDeporte
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,27 +157,6 @@ namespace BaratariaBackend.Migrations
                     b.HasIndex("DeporteId");
 
                     b.ToTable("Enlaces");
-                });
-
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.EnlaceActividad", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("ActividadId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Nombre")
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("varchar");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EnlacesActividad");
                 });
 
             modelBuilder.Entity("BaratariaBackend.Models.Entities.EnlaceDeporte", b =>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BaratariaBackend.Models.Entities
 {
-    public class Enlace
+    public class Imagen
     {
         [Key]
         public int Id { get; set; }

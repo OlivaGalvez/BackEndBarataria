@@ -56,10 +56,12 @@ namespace BaratariaBackend
                 options.AddPolicy("Administrador", policy => policy.RequireClaim("member_of", "administrador"));
             });
 
-            services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(options =>
-            {
-                options.UseNpgsql(Configuration.GetConnectionString("DevConnection"));
-            });
+            services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseNpgsql(Configuration.GetConnectionString("DevConnection")));
+            //services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(options =>
+            //{
+            //    options.UseNpgsql(Configuration.GetConnectionString("DevConnection"));
+            //});
 
             services.AddCors(options =>
             {

@@ -3,28 +3,30 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace BaratariaBackend.Migrations
 {
-    public partial class Nueva : Migration
+    public partial class AddentitiesEnlaceActividad : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Socios",
+                name: "EnlacesActividad",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Nombre = table.Column<string>(type: "varchar(50)", nullable: true)
+                    ActividadId = table.Column<int>(type: "integer", nullable: false),
+                    Nombre = table.Column<string>(type: "varchar(200)", nullable: true),
+                    Url = table.Column<string>(type: "varchar", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Socios", x => x.Id);
+                    table.PrimaryKey("PK_EnlacesActividad", x => x.Id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Socios");
+                name: "EnlacesActividad");
         }
     }
 }

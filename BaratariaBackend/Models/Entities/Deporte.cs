@@ -7,21 +7,16 @@ using System.Threading.Tasks;
 
 namespace BaratariaBackend.Models.Entities
 {
-    public class Actividad
+    public class Deporte
     {
         [Key]
         public int Id { get; set; }
-        public int IdTpActividad { get; set; }
         [Column(TypeName = "varchar(200)")]
         public string Titulo { get; set; }
         [Column(TypeName = "date")]
         public DateTime Fecha { get; set; }
         [Column(TypeName = "timestamp")]
         public DateTime Hora { get; set; }
-        [Column(TypeName = "timestamp")]
-        public DateTime? FechaBaja { get; set; }
-        [Column(TypeName = "boolean")]
-        public bool? Mostrar { get; set; }
         [Column(TypeName = "varchar")]
         public string Texto { get; set; }
         [Column(TypeName = "varchar(200)")]
@@ -32,6 +27,5 @@ namespace BaratariaBackend.Models.Entities
         public long ImagenPeso { get; set; }
 
         public virtual ICollection<Enlace> Enlaces { get; set; }
-        public virtual ICollection<Documento> Documentos { get; set; }
     }
 }

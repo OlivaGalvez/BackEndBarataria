@@ -15,9 +15,13 @@ namespace BaratariaBackend.Models.Entities
         public int SocioId { get; set; }
         [Column(TypeName = "varchar(200)")]
         public string Nombre { get; set; }
+        [Column(TypeName = "varchar(100)")]
         public string Descripcion { get; set; }
+        [Column(TypeName = "varchar(200)")]
         public string Original { get; set; }
+        [Column(TypeName = "timestamp")]
         public DateTime? Fecha { get; set; }
+        [Column(TypeName = "boolean")]
         public bool? Privado { get; set; }
 
         public virtual ICollection<TpDocumento> TpDocumentos { get; set; }

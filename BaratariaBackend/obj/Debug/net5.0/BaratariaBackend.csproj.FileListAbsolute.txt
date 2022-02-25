@@ -1696,7 +1696,6 @@ C:\Users\u178304\Desktop\WebBarataria\BackEndBarataria\BaratariaBackend\obj\Debu
 C:\Users\u178304\Desktop\WebBarataria\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\staticwebassets\BaratariaBackend.StaticWebAssets.xml
 C:\Users\u178304\Desktop\WebBarataria\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\scopedcss\bundle\BaratariaBackend.styles.css
 C:\Users\u178304\Desktop\WebBarataria\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\BaratariaBackend.RazorTargetAssemblyInfo.cache
-C:\Users\u178304\Desktop\WebBarataria\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\BaratariaBackend.csproj.CopyComplete
 C:\Users\u178304\Desktop\WebBarataria\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\BaratariaBackend.dll
 C:\Users\u178304\Desktop\WebBarataria\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\ref\BaratariaBackend.dll
 C:\Users\u178304\Desktop\WebBarataria\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\BaratariaBackend.pdb

@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace BaratariaBackend.Models.Entities
 {
-    public class Actividad
+    public class Sorteo
     {
         [Key]
         public int Id { get; set; }
-        public int IdTpActividad { get; set; }
+        public int IdTpSorteo { get; set; }
         [Column(TypeName = "varchar(200)")]
         public string Titulo { get; set; }
         [Column(TypeName = "date")]
@@ -19,8 +19,7 @@ namespace BaratariaBackend.Models.Entities
         [Column(TypeName = "timestamp")]
         public DateTime Hora { get; set; }
         [Column(TypeName = "timestamp")]
-        public DateTime? FechaBaja { get; set; }
-        [Column(TypeName = "boolean")]
+        public DateTime FechaBaja { get; set; }
         public bool? Mostrar { get; set; }
         [Column(TypeName = "varchar")]
         public string Texto { get; set; }
@@ -30,8 +29,14 @@ namespace BaratariaBackend.Models.Entities
         public string ImagenServidor { get; set; }
         [Column(TypeName = "bigint")]
         public long ImagenPeso { get; set; }
+        [Column(TypeName = "timestamp")]
+        public DateTime FechaSorteo { get; set; }
+        [Column(TypeName = "boolean")]
+        public bool? Excluyente { get; set; }
+        [Column(TypeName = "int")]
+        public int DiasRepeticion { get; set; }
 
-        public virtual ICollection<Enlace> Enlaces { get; set; }
-        public virtual ICollection<Documento> Documentos { get; set; }
+        public virtual ICollection<SocioSorteoRlGanadores> SocioSorteoRlGanadores { get; set; }
+        public virtual ICollection<Socio> SocioSorteoRlExcluidos { get; set; }
     }
 }
