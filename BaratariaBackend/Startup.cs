@@ -9,6 +9,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using System.Linq;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace BaratariaBackend
 {
@@ -60,10 +63,13 @@ namespace BaratariaBackend
 
             services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseNpgsql(Configuration.GetConnectionString("DevConnection")));
-            //services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(options =>
-            //{
-            //    options.UseNpgsql(Configuration.GetConnectionString("DevConnection"));
-            //});
+
+            services.Configure<FormOptions>(o => {
+                o.ValueLengthLimit = int.MaxValue;
+                o.MultipartBodyLengthLimit = int.MaxValue;
+                o.MemoryBufferThreshold = int.MaxValue;
+            });
+
 
             services.AddCors(options =>
             {
@@ -111,6 +117,13 @@ namespace BaratariaBackend
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+                RequestPath = new PathString("/Resources")
+            });
 
             app.UseRouting();
             app.UseCors();

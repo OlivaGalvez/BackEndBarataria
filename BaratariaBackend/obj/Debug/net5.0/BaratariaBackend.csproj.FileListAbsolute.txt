@@ -2126,3 +2126,4 @@ C:\Users\U179240\Documents\Angular\BackEndBarataria\BaratariaBackend\obj\Debug\n
 C:\Users\U179240\Documents\Angular\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\ref\BaratariaBackend.dll
 C:\Users\U179240\Documents\Angular\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\BaratariaBackend.pdb
 C:\Users\U179240\Documents\Angular\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\BaratariaBackend.genruntimeconfig.cache
+C:\Users\U179240\Documents\Angular\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\BaratariaBackend.csproj.AssemblyReference.cache
