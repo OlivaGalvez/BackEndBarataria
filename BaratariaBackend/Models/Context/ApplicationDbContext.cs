@@ -19,7 +19,6 @@ namespace BaratariaBackend.Models.Context
         public DbSet<EnlaceActividad> EnlacesActividad { get; set; }
         public DbSet<Documento> Documentos { get; set; }
         public DbSet<TpDocumento> TpDocumentos { get; set; }
-        public DbSet<Enlace> Enlaces { get; set; }
 
         public DbSet<Sorteo> Sorteos { get; set; }
         public DbSet<TpSorteo> TpSorteos { get; set; }

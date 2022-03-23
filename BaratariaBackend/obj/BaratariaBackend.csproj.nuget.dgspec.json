@@ -1,29 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\u178304\\Desktop\\WebBarataria\\BackEndBarataria\\BaratariaBackend\\BaratariaBackend.csproj": {}
+    "C:\\Users\\U179240\\Documents\\Angular\\BackEndBarataria\\BaratariaBackend\\BaratariaBackend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\u178304\\Desktop\\WebBarataria\\BackEndBarataria\\BaratariaBackend\\BaratariaBackend.csproj": {
+    "C:\\Users\\U179240\\Documents\\Angular\\BackEndBarataria\\BaratariaBackend\\BaratariaBackend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\u178304\\Desktop\\WebBarataria\\BackEndBarataria\\BaratariaBackend\\BaratariaBackend.csproj",
+        "projectUniqueName": "C:\\Users\\U179240\\Documents\\Angular\\BackEndBarataria\\BaratariaBackend\\BaratariaBackend.csproj",
         "projectName": "BaratariaBackend",
-        "projectPath": "C:\\Users\\u178304\\Desktop\\WebBarataria\\BackEndBarataria\\BaratariaBackend\\BaratariaBackend.csproj",
-        "packagesPath": "C:\\Users\\u178304\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\u178304\\Desktop\\WebBarataria\\BackEndBarataria\\BaratariaBackend\\obj\\",
+        "projectPath": "C:\\Users\\U179240\\Documents\\Angular\\BackEndBarataria\\BaratariaBackend\\BaratariaBackend.csproj",
+        "packagesPath": "C:\\Users\\U179240\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\U179240\\Documents\\Angular\\BackEndBarataria\\BaratariaBackend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
+          "C:\\Program Files (x86)\\DevExpress 20.2\\Components\\Offline Packages",
           "C:\\Program Files (x86)\\DevExpress 21.1\\Components\\Offline Packages",
           "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\Offline Packages",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\u178304\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\U179240\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 18.1.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 18.2.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 19.2.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 20.1.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 20.2.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 21.1.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 21.2.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -36,12 +38,13 @@
           "C:\\Program Files (x86)\\DevExpress 18.2\\Components\\System\\Components\\Packages": {},
           "C:\\Program Files (x86)\\DevExpress 19.2\\Components\\System\\Components\\Packages": {},
           "C:\\Program Files (x86)\\DevExpress 20.1\\Components\\System\\Components\\Packages": {},
+          "C:\\Program Files (x86)\\DevExpress 20.2\\Components\\System\\Components\\Packages": {},
           "C:\\Program Files (x86)\\DevExpress 21.1\\Components\\System\\Components\\Packages": {},
           "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\System\\Components\\Packages": {},
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "http://yoda3/nugetserver/nuget": {},
           "https://api.nuget.org/v3/index.json": {},
-          "https://nuget.devexpress.com/TeCaNfOJJwibdhWcl1ijZxnZjBI2VCrVQl3GY3MSyRJ5O5yc4j/api": {}
+          "https://devops.eurocajarural.es/DefaultCollection/d49d0661-4af9-4352-a4ac-8ff7cf470d36/_packaging/BlazorComponentsDs/nuget/v3/index.json": {}
         },
         "frameworks": {
           "net5.0": {
@@ -116,6 +119,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[5.0.14, 5.0.14]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -124,7 +133,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.102\\RuntimeIdentifierGraph.json"
         }
       }
     }

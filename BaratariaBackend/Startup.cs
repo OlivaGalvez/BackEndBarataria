@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using System.Linq;
 
 namespace BaratariaBackend
 {
@@ -73,7 +75,32 @@ namespace BaratariaBackend
             });
 
             services.AddControllers();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                c.ResolveConflictingActions(apiDescriptions =>
+                {
+                    var descriptions = apiDescriptions as ApiDescription[] ?? apiDescriptions.ToArray();
+                    var first = descriptions.First(); // build relative to the 1st method
+                    var parameters = descriptions.SelectMany(d => d.ParameterDescriptions).ToList();
+
+                    first.ParameterDescriptions.Clear();
+                    // add parameters and make them optional
+                    foreach (var parameter in parameters)
+                        if (first.ParameterDescriptions.All(x => x.Name != parameter.Name))
+                        {
+                            first.ParameterDescriptions.Add(new ApiParameterDescription
+                            {
+                                ModelMetadata = parameter.ModelMetadata,
+                                Name = parameter.Name,
+                                ParameterDescriptor = parameter.ParameterDescriptor,
+                                Source = parameter.Source,
+                                IsRequired = false,
+                                DefaultValue = null
+                            });
+                        }
+                    return first;
+                });
+            });
 
         }
 

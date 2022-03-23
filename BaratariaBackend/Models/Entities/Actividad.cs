@@ -11,13 +11,11 @@ namespace BaratariaBackend.Models.Entities
     {
         [Key]
         public int Id { get; set; }
-        public int IdTpActividad { get; set; }
+        public int? IdTpActividad { get; set; }
         [Column(TypeName = "varchar(200)")]
         public string Titulo { get; set; }
-        [Column(TypeName = "date")]
-        public DateTime Fecha { get; set; }
         [Column(TypeName = "timestamp")]
-        public DateTime Hora { get; set; }
+        public DateTime? FechaAlta { get; set; }
         [Column(TypeName = "timestamp")]
         public DateTime? FechaBaja { get; set; }
         [Column(TypeName = "boolean")]
@@ -29,9 +27,8 @@ namespace BaratariaBackend.Models.Entities
         [Column(TypeName = "varchar(200)")]
         public string ImagenServidor { get; set; }
         [Column(TypeName = "bigint")]
-        public long ImagenPeso { get; set; }
+        public long? ImagenPeso { get; set; }
 
-        public virtual ICollection<Enlace> Enlaces { get; set; }
         public virtual ICollection<Documento> Documentos { get; set; }
     }
 }
