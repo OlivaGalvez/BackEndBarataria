@@ -23,14 +23,24 @@ namespace BaratariaBackend.Controllers
                
                 if (file.Length > 0)
                 {
-                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    string fileName = DateTime.Now.Day.ToString("00") +
+                    DateTime.Now.Month.ToString("00") + DateTime.Now.Year + DateTime.Now.Hour.ToString("00") +
+                    DateTime.Now.Minute.ToString("00") + DateTime.Now.Second.ToString("00") +
+                    ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+
                     var fullPath = Path.Combine(pathToSave, fileName);
                     var dbPath = Path.Combine(folderName, fileName);
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
                         file.CopyTo(stream);
                     }
-                    return Ok(new { dbPath });
+
+                    var result = new {
+                        dbPath = dbPath,
+                        fileName = fileName
+                    };
+
+                    return Ok(result);
                 }
                 else
                 {

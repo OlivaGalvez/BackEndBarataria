@@ -99,6 +99,8 @@ namespace BaratariaBackend.Controllers
                     {
                         file.CopyTo(stream);
                     }
+                    actividadModel.ImagenPeso = file.Length;
+                    actividadModel.ImagenOriginal = file.FileName;
                 }
 
                 _context.Actividades.Add(actividadModel);
