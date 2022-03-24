@@ -12,21 +12,14 @@ namespace BaratariaBackend.Controllers
     public class UploadController : Controller
     {
         [HttpPost, DisableRequestSizeLimit]
-        public async Task<IActionResult> Upload(bool temp = false)
+        public async Task<IActionResult> Upload()
         {
             try
             {
                 var formCollection = await Request.ReadFormAsync();
                 var file = formCollection.Files.First();
                 var folderName = "imagenes";
-                var pathToSave = "";
-                if (temp)
-                {
-                    pathToSave = "C:\\tmp\\imagenes";
-                }
-                else {
-                    pathToSave = "C:\\repositorios\\imagenes";
-                }
+                var pathToSave = "C:\\tmp\\imagenes";
                
                 if (file.Length > 0)
                 {

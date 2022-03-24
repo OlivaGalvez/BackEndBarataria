@@ -4,9 +4,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace BaratariaBackend.Controllers
@@ -78,13 +81,35 @@ namespace BaratariaBackend.Controllers
 
         // POST: api/Actividades
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Actividad>> PostActividad(Actividad actividad)
+        [HttpPost, DisableRequestSizeLimit]
+        public async Task<ActionResult<Actividad>> PostActividad([FromForm] string actividad, [FromForm] IFormFile file)
         {
-            _context.Actividades.Add(actividad);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var folderName = "imagenes";
+                var pathToSave = "C:\\repositorios\\imagenes";
+                var actividadModel = JsonConvert.DeserializeObject<Actividad>(actividad);
 
-            return CreatedAtAction("GetActividad", new { id = actividad.Id }, actividad);
+                if (file.Length > 0)
+                {
+                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    var fullPath = Path.Combine(pathToSave, fileName);
+                    var dbPath = Path.Combine(folderName, fileName);
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+                }
+
+                _context.Actividades.Add(actividadModel);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetActividad", new { id = actividadModel.Id }, actividadModel);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
         }
 
         // DELETE: api/Actividades/5
