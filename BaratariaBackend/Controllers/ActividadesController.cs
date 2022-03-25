@@ -22,22 +22,28 @@ namespace BaratariaBackend.Controllers
     public class ActividadesController : Controller
     {
         private readonly ApplicationDbContext _context;
-
+        private readonly bool isDevelopment;
+        private readonly string pathImagen;
         public ActividadesController(ApplicationDbContext context)
         {
             _context = context;
+            isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+            if (isDevelopment) pathImagen = "C:\\repositorios\\imagenes\\";
         }
 
         // GET: api/Actividades
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ActividadVm>>> GetActividades()
         {
+            if (isDevelopment)
+            { 
+            
+            }
             List<ActividadVm> listVm = new List<ActividadVm>();
             List<Actividad> list = await _context.Actividades.Where(i=>i.Mostrar == true).ToListAsync();
 
             foreach (Actividad actividad in list)
             {
-                string pathImagen = "C:\\repositorios\\imagenes\\";
 
                 byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + actividad.ImagenServidor);
                 string base64ImageRepresentation = Convert.ToBase64String(imageArray);
@@ -108,12 +114,11 @@ namespace BaratariaBackend.Controllers
             try
             {
                 var folderName = "imagenes";
-                var pathToSave = "C:\\repositorios\\imagenes";
                 var actividadModel = JsonConvert.DeserializeObject<Actividad>(actividad);
 
                 if (file.Length > 0)
                 {
-                    var fullPath = Path.Combine(pathToSave, actividadModel.ImagenServidor);
+                    var fullPath = Path.Combine(pathImagen, actividadModel.ImagenServidor);
                     var dbPath = Path.Combine(folderName, actividadModel.ImagenServidor);
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
