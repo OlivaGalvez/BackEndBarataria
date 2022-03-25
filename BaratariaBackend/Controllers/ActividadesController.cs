@@ -1,5 +1,6 @@
 ﻿using BaratariaBackend.Models.Context;
 using BaratariaBackend.Models.Entities;
+using BaratariaBackend.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,9 +30,29 @@ namespace BaratariaBackend.Controllers
 
         // GET: api/Actividades
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Actividad>>> GetActividades()
+        public async Task<ActionResult<IEnumerable<ActividadVm>>> GetActividades()
         {
-            return await _context.Actividades.ToListAsync();
+            List<ActividadVm> listVm = new List<ActividadVm>();
+            List<Actividad> list = await _context.Actividades.Where(i=>i.Mostrar == true).ToListAsync();
+
+            foreach (Actividad actividad in list)
+            {
+                string pathImagen = "C:\\repositorios\\imagenes\\";
+
+                byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + actividad.ImagenServidor);
+                string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+
+                ActividadVm vm = new()
+                {
+                    Id = actividad.Id,
+                    Titulo = actividad.Titulo,
+                    Texto = actividad.Texto,
+                    ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation
+                };
+                listVm.Add(vm);
+            }
+
+            return listVm;
         }
 
         // GET: api/Actividades/5
@@ -92,9 +113,8 @@ namespace BaratariaBackend.Controllers
 
                 if (file.Length > 0)
                 {
-                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                    var fullPath = Path.Combine(pathToSave, fileName);
-                    var dbPath = Path.Combine(folderName, fileName);
+                    var fullPath = Path.Combine(pathToSave, actividadModel.ImagenServidor);
+                    var dbPath = Path.Combine(folderName, actividadModel.ImagenServidor);
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
                         file.CopyTo(stream);
