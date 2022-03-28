@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "YfTlEeT3D8jeIpQIioNeGVKQMatkBVu1aNWszPmXc6KbpqEOd2v7K1j/GOy9LZVb5QvfrR5UVXglgfce3QHpfQ==",
+  "dgSpecHash": "k6Qege6KVgBP9LaT1NLQ/T65XjOZHyl/d5fZetZAoCTg7PVbVrNjTi1H6CVzx2ElEMesK84+mrB3fYaWrJHakg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\U179240\\Documents\\Angular\\BackEndBarataria\\BaratariaBackend\\BaratariaBackend.csproj",
+  "projectFilePath": "C:\\Users\\U179240\\Documents\\Barataria\\BackEndBarataria\\BaratariaBackend\\BaratariaBackend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\U179240\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\U179240\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\5.0.11\\microsoft.aspnetcore.authentication.jwtbearer.5.0.11.nupkg.sha512",

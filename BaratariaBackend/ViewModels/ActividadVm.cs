@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BaratariaBackend.Models.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BaratariaBackend.ViewModels
@@ -16,6 +18,6 @@ namespace BaratariaBackend.ViewModels
         public string Texto { get; set; }
         public string ImagenServidor { get; set; }
         public string ImagenServidorBase64 { get; set; }
-        public IFormFile File { get; set; }
+        public List<EnlaceActividad> ListEnlaces { get; set; }
     }
 }

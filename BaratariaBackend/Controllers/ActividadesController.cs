@@ -35,10 +35,6 @@ namespace BaratariaBackend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ActividadVm>>> GetActividades()
         {
-            if (isDevelopment)
-            { 
-            
-            }
             List<ActividadVm> listVm = new List<ActividadVm>();
             List<Actividad> list = await _context.Actividades.Where(i=>i.Mostrar == true).ToListAsync();
 
@@ -113,25 +109,51 @@ namespace BaratariaBackend.Controllers
         {
             try
             {
+                Actividad act = null;
                 var folderName = "imagenes";
-                var actividadModel = JsonConvert.DeserializeObject<Actividad>(actividad);
+                var actividadVewModel = JsonConvert.DeserializeObject<ActividadVm>(actividad);
 
                 if (file.Length > 0)
                 {
-                    var fullPath = Path.Combine(pathImagen, actividadModel.ImagenServidor);
-                    var dbPath = Path.Combine(folderName, actividadModel.ImagenServidor);
+                    var fullPath = Path.Combine(pathImagen, actividadVewModel.ImagenServidor);
+                    var dbPath = Path.Combine(folderName, actividadVewModel.ImagenServidor);
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
                         file.CopyTo(stream);
                     }
-                    actividadModel.ImagenPeso = file.Length;
-                    actividadModel.ImagenOriginal = file.FileName;
+
+                    act = new Actividad {
+                        Titulo = actividadVewModel.Titulo,
+                        FechaAlta = actividadVewModel.FechaAlta,
+                        FechaBaja = actividadVewModel.FechaBaja,
+                        Mostrar = actividadVewModel.Mostrar,
+                        Texto = actividadVewModel.Texto,
+                        ImagenServidor = actividadVewModel.ImagenServidor,
+                        ImagenPeso = file.Length,
+                        ImagenOriginal = file.FileName
+                    };
                 }
 
-                _context.Actividades.Add(actividadModel);
+                _context.Actividades.Add(act);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetActividad", new { id = actividadModel.Id }, actividadModel);
+                if (actividadVewModel.ListEnlaces != null)
+                {
+                    List<EnlaceActividad> listEnlaces = new List<EnlaceActividad>();
+                    foreach (EnlaceActividad enlace in actividadVewModel.ListEnlaces)
+                    {
+                        EnlaceActividad en = new EnlaceActividad { 
+                            ActividadId = act.Id,
+                            Nombre = enlace.Nombre,
+                            Url = enlace.Url
+                        };
+                        listEnlaces.Add(en);
+                    }
+                    _context.EnlacesActividad.AddRange(listEnlaces);
+                    await _context.SaveChangesAsync();
+                }
+
+                return CreatedAtAction("GetActividad", new { id = actividadVewModel.Id }, actividadVewModel);
             }
             catch (Exception ex)
             {

@@ -17,17 +17,17 @@ namespace BaratariaBackend.Controllers
         public UploadController() 
         {
             isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
-            if (isDevelopment) pathImagen = "C:\\repositorios\\imagenes\\";
+            if (isDevelopment) pathImagen = "C:\\repositorios\\";
         }
 
         [HttpPost, DisableRequestSizeLimit]
-        public async Task<IActionResult> Upload()
+        public async Task<IActionResult> Upload(string carpeta = "imagenes")
         {
             try
             {
                 var formCollection = await Request.ReadFormAsync();
                 var file = formCollection.Files.First();
-                var folderName = "imagenes";
+                var folderName = carpeta;
                
                 if (file.Length > 0)
                 {
@@ -36,7 +36,7 @@ namespace BaratariaBackend.Controllers
                     DateTime.Now.Minute.ToString("00") + DateTime.Now.Second.ToString("00") +
                     ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
 
-                    var fullPath = Path.Combine(pathImagen, fileName);
+                    var fullPath = Path.Combine(pathImagen + carpeta, fileName);
                     var dbPath = Path.Combine(folderName, fileName);
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
