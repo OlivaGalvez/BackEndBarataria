@@ -29,6 +29,7 @@ namespace BaratariaBackend.Models.Entities
         [Column(TypeName = "bigint")]
         public long? ImagenPeso { get; set; }
 
+
         public virtual ICollection<Documento> Documentos { get; set; }
         public virtual ICollection<EnlaceActividad> EnlaceActividads { get; set; }
     }

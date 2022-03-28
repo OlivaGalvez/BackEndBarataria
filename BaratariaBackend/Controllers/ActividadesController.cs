@@ -44,13 +44,17 @@ namespace BaratariaBackend.Controllers
                 byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + actividad.ImagenServidor);
                 string base64ImageRepresentation = Convert.ToBase64String(imageArray);
 
+                List<EnlaceActividad> listEnlaces = _context.EnlacesActividad.Where(i => i.ActividadId == actividad.Id).ToList();
+
                 ActividadVm vm = new()
                 {
                     Id = actividad.Id,
                     Titulo = actividad.Titulo,
                     Texto = actividad.Texto,
-                    ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation
+                    ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation,
+                    ListEnlaces = listEnlaces
                 };
+
                 listVm.Add(vm);
             }
 
@@ -142,7 +146,8 @@ namespace BaratariaBackend.Controllers
                     List<EnlaceActividad> listEnlaces = new List<EnlaceActividad>();
                     foreach (EnlaceActividad enlace in actividadVewModel.ListEnlaces)
                     {
-                        EnlaceActividad en = new EnlaceActividad { 
+                        EnlaceActividad en = new()
+                        { 
                             ActividadId = act.Id,
                             Nombre = enlace.Nombre,
                             Url = enlace.Url
