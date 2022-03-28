@@ -11,8 +11,8 @@ namespace BaratariaBackend.Models.Entities
     {
         [Key]
         public int Id { get; set; }
-        public int ActividadId { get; set; }
-        public int SocioId { get; set; }
+        public int? ActividadId { get; set; }
+        public int? SocioId { get; set; }
         [Column(TypeName = "varchar(200)")]
         public string Nombre { get; set; }
         [Column(TypeName = "varchar(100)")]
