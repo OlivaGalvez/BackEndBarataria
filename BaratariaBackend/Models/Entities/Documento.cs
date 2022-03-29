@@ -19,6 +19,10 @@ namespace BaratariaBackend.Models.Entities
         public string Original { get; set; }
         [Column(TypeName = "varchar(500)")]
         public string Servidor { get; set; }
+        [Column(TypeName = "varchar(500)")]
+        public string Url { get; set; }
+        [Column(TypeName = "varchar(500)")]
+        public string Tamanio { get; set; }
         [Column(TypeName = "timestamp")]
         public DateTime? Fecha { get; set; }
         [Column(TypeName = "boolean")]

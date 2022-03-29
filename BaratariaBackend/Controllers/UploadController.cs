@@ -45,7 +45,8 @@ namespace BaratariaBackend.Controllers
 
                     var result = new {
                         dbPath = dbPath,
-                        fileName = fileName
+                        fileName = fileName,
+                        fullPath = fullPath
                     };
 
                     return Ok(result);

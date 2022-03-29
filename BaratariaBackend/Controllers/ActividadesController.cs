@@ -24,11 +24,16 @@ namespace BaratariaBackend.Controllers
         private readonly ApplicationDbContext _context;
         private readonly bool isDevelopment;
         private readonly string pathImagen;
+        private readonly string pathDoc;
         public ActividadesController(ApplicationDbContext context)
         {
             _context = context;
             isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
-            if (isDevelopment) pathImagen = "C:\\repositorios\\imagenes\\";
+            if (isDevelopment)
+            {
+                pathImagen = "C:\\repositorios\\imagenes\\";
+                pathDoc = "C:\\repositorios\\documentos\\";
+            }
         }
 
         // GET: api/Actividades
@@ -45,6 +50,7 @@ namespace BaratariaBackend.Controllers
                 string base64ImageRepresentation = Convert.ToBase64String(imageArray);
 
                 List<EnlaceActividad> listEnlaces = _context.EnlacesActividad.Where(i => i.ActividadId == actividad.Id).ToList();
+                List<Documento> listDocumentos = _context.Documentos.Where(i => i.ActividadId == actividad.Id).ToList();
 
                 ActividadVm vm = new()
                 {
@@ -52,7 +58,8 @@ namespace BaratariaBackend.Controllers
                     Titulo = actividad.Titulo,
                     Texto = actividad.Texto,
                     ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation,
-                    ListEnlaces = listEnlaces
+                    ListEnlaces = listEnlaces,
+                    ListDocumentos = listDocumentos
                 };
 
                 listVm.Add(vm);
@@ -109,7 +116,7 @@ namespace BaratariaBackend.Controllers
         // POST: api/Actividades
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost, DisableRequestSizeLimit]
-        public async Task<ActionResult<Actividad>> PostActividad([FromForm] string actividad, [FromForm] IFormFile file)
+        public async Task<ActionResult<Actividad>> PostActividad([FromForm] string actividad, [FromForm] IFormFile imagen, [FromForm] string documentos)
         {
             try
             {
@@ -117,24 +124,25 @@ namespace BaratariaBackend.Controllers
                 var folderName = "imagenes";
                 var actividadVewModel = JsonConvert.DeserializeObject<ActividadVm>(actividad);
 
-                if (file.Length > 0)
+                if (imagen.Length > 0)
                 {
                     var fullPath = Path.Combine(pathImagen, actividadVewModel.ImagenServidor);
                     var dbPath = Path.Combine(folderName, actividadVewModel.ImagenServidor);
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
-                        file.CopyTo(stream);
+                        imagen.CopyTo(stream);
                     }
 
-                    act = new Actividad {
+                    act = new Actividad
+                    {
                         Titulo = actividadVewModel.Titulo,
                         FechaAlta = actividadVewModel.FechaAlta,
                         FechaBaja = actividadVewModel.FechaBaja,
                         Mostrar = actividadVewModel.Mostrar,
                         Texto = actividadVewModel.Texto,
                         ImagenServidor = actividadVewModel.ImagenServidor,
-                        ImagenPeso = file.Length,
-                        ImagenOriginal = file.FileName
+                        ImagenPeso = imagen.Length,
+                        ImagenOriginal = imagen.FileName
                     };
                 }
 
@@ -147,7 +155,7 @@ namespace BaratariaBackend.Controllers
                     foreach (EnlaceActividad enlace in actividadVewModel.ListEnlaces)
                     {
                         EnlaceActividad en = new()
-                        { 
+                        {
                             ActividadId = act.Id,
                             Nombre = enlace.Nombre,
                             Url = enlace.Url
@@ -158,7 +166,28 @@ namespace BaratariaBackend.Controllers
                     await _context.SaveChangesAsync();
                 }
 
-                return CreatedAtAction("GetActividad", new { id = actividadVewModel.Id }, actividadVewModel);
+                if (actividadVewModel.ListDocumentos != null)
+                {
+                    List<Documento> listDocumentos = new List<Documento>();
+                    foreach (Documento documento in actividadVewModel.ListDocumentos)
+                    {
+                        Documento doc = new()
+                        {
+                            ActividadId = act.Id,
+                            Nombre = documento.Nombre,
+                            Original = documento.Original,
+                            Servidor = documento.Servidor,
+                            Fecha = DateTime.Now,
+                            Url = pathDoc + documento.Servidor,
+                            Tamanio = documento.Tamanio
+                        };
+                        listDocumentos.Add(doc);
+                    }
+                    _context.Documentos.AddRange(listDocumentos);
+                    await _context.SaveChangesAsync();
+                }
+
+                return CreatedAtAction("GetActividad", new { id = act.Id }, act);
             }
             catch (Exception ex)
             {
