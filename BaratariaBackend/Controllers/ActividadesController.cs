@@ -38,10 +38,18 @@ namespace BaratariaBackend.Controllers
 
         // GET: api/Actividades
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ActividadVm>>> GetActividades()
+        public async Task<ActionResult<IEnumerable<ActividadVm>>> GetActividades(bool portal = true)
         {
             List<ActividadVm> listVm = new List<ActividadVm>();
-            List<Actividad> list = await _context.Actividades.Where(i=>i.Mostrar == true).ToListAsync();
+            List<Actividad> list = new List<Actividad>();
+
+            if (portal == true)
+            {
+                list = await _context.Actividades.Where(i => i.Mostrar == true).ToListAsync();
+            }
+            else {
+                list = await _context.Actividades.ToListAsync();
+            }
 
             foreach (Actividad actividad in list)
             {
@@ -55,8 +63,11 @@ namespace BaratariaBackend.Controllers
                 ActividadVm vm = new()
                 {
                     Id = actividad.Id,
+                    FechaAlta = actividad.FechaAlta,
+                    FechaBaja = actividad.FechaBaja,
                     Titulo = actividad.Titulo,
                     Texto = actividad.Texto,
+                    Mostrar = actividad.Mostrar,
                     ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation,
                     ListEnlaces = listEnlaces,
                     ListDocumentos = listDocumentos
@@ -149,7 +160,7 @@ namespace BaratariaBackend.Controllers
                 _context.Actividades.Add(act);
                 await _context.SaveChangesAsync();
 
-                if (actividadVewModel.ListEnlaces != null)
+                if (actividadVewModel.ListEnlaces.Count() > 0)
                 {
                     List<EnlaceActividad> listEnlaces = new List<EnlaceActividad>();
                     foreach (EnlaceActividad enlace in actividadVewModel.ListEnlaces)
@@ -166,7 +177,7 @@ namespace BaratariaBackend.Controllers
                     await _context.SaveChangesAsync();
                 }
 
-                if (actividadVewModel.ListDocumentos != null)
+                if (actividadVewModel.ListDocumentos.Count() > 0)
                 {
                     List<Documento> listDocumentos = new List<Documento>();
                     foreach (Documento documento in actividadVewModel.ListDocumentos)
