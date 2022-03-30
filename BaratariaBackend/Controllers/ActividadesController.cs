@@ -308,6 +308,10 @@ namespace BaratariaBackend.Controllers
                 return NotFound();
             }
 
+            List<Documento> listDocBorrado = _context.Documentos.Where(i => i.ActividadId == id).ToList();
+            if (listDocBorrado != null) _context.RemoveRange(listDocBorrado);
+            await _context.SaveChangesAsync();
+
             _context.Actividades.Remove(actividad);
             await _context.SaveChangesAsync();
 
@@ -318,91 +322,6 @@ namespace BaratariaBackend.Controllers
         {
             return _context.Actividades.Any(e => e.Id == id);
         }
-
-        // GET: api/Actividades/EnlacesByActividad/5
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<EnlaceActividad>>> GetEnlacesByActividad(int id)
-        //{
-        //    return await _context.EnlacesActividad.Where(t => t.ActividadId == id).ToListAsync();
-        //}
-
-        //// GET: api/Actividades/Enlaces/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<EnlaceActividad>> GetEnlace(int id)
-        //{
-        //    var enlaceActividad = await _context.EnlacesActividad.FindAsync(id);
-
-        //    if (enlaceActividad == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return enlaceActividad;
-        //}
-
-        //// PUT: api/Actividades/Enlaces/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutEnlace(int id, EnlaceActividad enlaceActividad)
-        //{
-        //    if (id != enlaceActividad.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(enlaceActividad).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!EnlaceActividadExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
-        //// POST: api/Actividades/Enlaces
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<EnlaceActividad>> PostEnlace(EnlaceActividad enlaceActividad)
-        //{
-        //    _context.EnlacesActividad.Add(enlaceActividad);
-        //    await _context.SaveChangesAsync();
-
-        //    return CreatedAtAction("GetEnlace", new { id = enlaceActividad.Id }, enlaceActividad);
-        //}
-
-        //// DELETE: api/Actividades/Enlaces/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteEnlace(int id)
-        //{
-        //    var enlaceActividad = await _context.EnlacesActividad.FindAsync(id);
-        //    if (enlaceActividad == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.EnlacesActividad.Remove(enlaceActividad);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-
-        //private bool EnlaceActividadExists(int id)
-        //{
-        //    return _context.EnlacesActividad.Any(e => e.Id == id);
-        //}
-
+       
     }
 }
