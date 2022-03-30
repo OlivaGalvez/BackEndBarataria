@@ -45,10 +45,10 @@ namespace BaratariaBackend.Controllers
 
             if (portal == true)
             {
-                list = await _context.Actividades.Where(i => i.Mostrar == true).ToListAsync();
+                list = await _context.Actividades.Where(i => i.Mostrar == true).OrderByDescending(i=>i.FechaAlta).ToListAsync();
             }
             else {
-                list = await _context.Actividades.ToListAsync();
+                list = await _context.Actividades.OrderByDescending(i => i.FechaAlta).ToListAsync();
             }
 
             foreach (Actividad actividad in list)
