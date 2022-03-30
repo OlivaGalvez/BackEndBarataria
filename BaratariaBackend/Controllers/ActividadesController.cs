@@ -124,7 +124,13 @@ namespace BaratariaBackend.Controllers
                 return BadRequest();
             }
 
-            if (imagen.Length > 0)
+            Actividad act = _context.Actividades.Find(id);
+            if (act == null)
+            {
+                return BadRequest();
+            }
+
+            if (imagen != null && imagen.Length > 0)
             {
                 var fullPath = Path.Combine(pathImagen, actividadVewModel.ImagenServidor);
                 var dbPath = Path.Combine(folderName, actividadVewModel.ImagenServidor);
@@ -132,18 +138,63 @@ namespace BaratariaBackend.Controllers
                 {
                     imagen.CopyTo(stream);
                 }
-
-                Actividad act = _context.Actividades.Find(id);
-                act.Titulo = actividadVewModel.Titulo;
-                act.FechaAlta = actividadVewModel.FechaAlta;
-                act.FechaBaja = actividadVewModel.FechaBaja;
-                act.Mostrar = actividadVewModel.Mostrar;
-                act.Texto = actividadVewModel.Texto;
+            }
+            act.Titulo = actividadVewModel.Titulo;
+            act.FechaAlta = actividadVewModel.FechaAlta;
+            act.FechaBaja = actividadVewModel.FechaBaja;
+            act.Mostrar = actividadVewModel.Mostrar;
+            act.Texto = actividadVewModel.Texto;
+            if (imagen != null)
+            {
                 act.ImagenServidor = actividadVewModel.ImagenServidor;
                 act.ImagenPeso = imagen.Length;
                 act.ImagenOriginal = imagen.FileName;
+            }
+          
 
-                _context.Entry(act).State = EntityState.Modified;
+            _context.Entry(act).State = EntityState.Modified;
+
+            List<EnlaceActividad> listActBorrado = _context.EnlacesActividad.Where(i => i.ActividadId == id).ToList();
+            if (listActBorrado != null) _context.RemoveRange(listActBorrado);
+            List<Documento> listDocBorrado = _context.Documentos.Where(i => i.ActividadId == id).ToList();
+            if (listDocBorrado != null) _context.RemoveRange(listDocBorrado);
+            await _context.SaveChangesAsync();
+
+            if (actividadVewModel.ListEnlaces.Count() > 0)
+            {
+                List<EnlaceActividad> listEnlaces = new();
+                foreach (EnlaceActividad enlace in actividadVewModel.ListEnlaces)
+                {
+                    EnlaceActividad en = new()
+                    {
+                        ActividadId = act.Id,
+                        Nombre = enlace.Nombre,
+                        Url = enlace.Url
+                    };
+                    listEnlaces.Add(en);
+                }
+                _context.EnlacesActividad.AddRange(listEnlaces);
+            }
+
+            if (actividadVewModel.ListDocumentos.Count() > 0)
+            {
+                List<Documento> listDocumentos = new();
+                foreach (Documento documento in actividadVewModel.ListDocumentos)
+                {
+                    Documento doc = new()
+                    {
+                        ActividadId = act.Id,
+                        Nombre = documento.Nombre,
+                        Original = documento.Original,
+                        Servidor = documento.Servidor,
+                        Fecha = DateTime.Now,
+                        Url = pathDoc + documento.Servidor,
+                        Tamanio = documento.Tamanio
+                    };
+                    listDocumentos.Add(doc);
+                }
+                _context.Documentos.AddRange(listDocumentos);
+                await _context.SaveChangesAsync();
             }
 
             try
