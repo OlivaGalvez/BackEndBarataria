@@ -40,8 +40,8 @@ namespace BaratariaBackend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ActividadVm>>> GetActividades(bool portal = true)
         {
-            List<ActividadVm> listVm = new List<ActividadVm>();
-            List<Actividad> list = new List<Actividad>();
+            List<ActividadVm> listVm = new();
+            List<Actividad> list = new();
 
             if (portal == true)
             {
@@ -81,7 +81,7 @@ namespace BaratariaBackend.Controllers
 
         // GET: api/Actividades/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Actividad>> GetActividad(int id)
+        public async Task<ActionResult<ActividadVm>> GetActividad(int id)
         {
             var actividad = await _context.Actividades.FindAsync(id);
 
@@ -90,20 +90,61 @@ namespace BaratariaBackend.Controllers
                 return NotFound();
             }
 
-            return actividad;
+            byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + actividad.ImagenServidor);
+            string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+
+            List<EnlaceActividad> listEnlaces = _context.EnlacesActividad.Where(i => i.ActividadId == actividad.Id).ToList();
+            List<Documento> listDocumentos = _context.Documentos.Where(i => i.ActividadId == actividad.Id).ToList();
+
+            ActividadVm vm = new()
+            {
+                Id = actividad.Id,
+                FechaAlta = actividad.FechaAlta,
+                FechaBaja = actividad.FechaBaja,
+                Titulo = actividad.Titulo,
+                Texto = actividad.Texto,
+                Mostrar = actividad.Mostrar,
+                ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation,
+                ListEnlaces = listEnlaces,
+                ListDocumentos = listDocumentos
+            };
+
+            return vm;
         }
 
         // PUT: api/Actividades/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutActividad(int id, Actividad actividad)
+        public async Task<IActionResult> PutActividad(int id, [FromForm] string actividad, [FromForm] IFormFile imagen, [FromForm] string documentos)
         {
-            if (id != actividad.Id)
+            var folderName = "imagenes";
+            var actividadVewModel = JsonConvert.DeserializeObject<ActividadVm>(actividad);
+            if (actividadVewModel.Id != id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(actividad).State = EntityState.Modified;
+            if (imagen.Length > 0)
+            {
+                var fullPath = Path.Combine(pathImagen, actividadVewModel.ImagenServidor);
+                var dbPath = Path.Combine(folderName, actividadVewModel.ImagenServidor);
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    imagen.CopyTo(stream);
+                }
+
+                Actividad act = _context.Actividades.Find(id);
+                act.Titulo = actividadVewModel.Titulo;
+                act.FechaAlta = actividadVewModel.FechaAlta;
+                act.FechaBaja = actividadVewModel.FechaBaja;
+                act.Mostrar = actividadVewModel.Mostrar;
+                act.Texto = actividadVewModel.Texto;
+                act.ImagenServidor = actividadVewModel.ImagenServidor;
+                act.ImagenPeso = imagen.Length;
+                act.ImagenOriginal = imagen.FileName;
+
+                _context.Entry(act).State = EntityState.Modified;
+            }
 
             try
             {
@@ -111,7 +152,7 @@ namespace BaratariaBackend.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ActividadExists(id))
+                if (!ActividadExists(actividadVewModel.Id))
                 {
                     return NotFound();
                 }
@@ -162,7 +203,7 @@ namespace BaratariaBackend.Controllers
 
                 if (actividadVewModel.ListEnlaces.Count() > 0)
                 {
-                    List<EnlaceActividad> listEnlaces = new List<EnlaceActividad>();
+                    List<EnlaceActividad> listEnlaces = new ();
                     foreach (EnlaceActividad enlace in actividadVewModel.ListEnlaces)
                     {
                         EnlaceActividad en = new()
@@ -179,7 +220,7 @@ namespace BaratariaBackend.Controllers
 
                 if (actividadVewModel.ListDocumentos.Count() > 0)
                 {
-                    List<Documento> listDocumentos = new List<Documento>();
+                    List<Documento> listDocumentos = new ();
                     foreach (Documento documento in actividadVewModel.ListDocumentos)
                     {
                         Documento doc = new()
