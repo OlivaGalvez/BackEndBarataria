@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BaratariaBackend.Models.Entities
 {
-    public class Actividad
+    public class Convenio
     {
         [Key]
         public int Id { get; set; }
@@ -18,16 +15,10 @@ namespace BaratariaBackend.Models.Entities
         [Column(TypeName = "boolean")]
         public bool? Mostrar { get; set; }
         [Column(TypeName = "varchar")]
-        public string Texto { get; set; }
-        [Column(TypeName = "varchar(200)")]
         public string ImagenOriginal { get; set; }
         [Column(TypeName = "varchar(200)")]
         public string ImagenServidor { get; set; }
         [Column(TypeName = "bigint")]
         public long? ImagenPeso { get; set; }
-
-
-        public virtual ICollection<Documento> Documentos { get; set; }
-        public virtual ICollection<EnlaceActividad> EnlaceActividads { get; set; }
     }
 }

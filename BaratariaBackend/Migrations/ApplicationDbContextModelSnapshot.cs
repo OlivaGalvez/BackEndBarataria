@@ -29,12 +29,6 @@ namespace BaratariaBackend.Migrations
                     b.Property<DateTime?>("FechaAlta")
                         .HasColumnType("timestamp");
 
-                    b.Property<DateTime?>("FechaBaja")
-                        .HasColumnType("timestamp");
-
-                    b.Property<int?>("IdTpActividad")
-                        .HasColumnType("integer");
-
                     b.Property<string>("ImagenOriginal")
                         .HasColumnType("varchar(200)");
 
@@ -56,6 +50,36 @@ namespace BaratariaBackend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Actividades");
+                });
+
+            modelBuilder.Entity("BaratariaBackend.Models.Entities.Convenio", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime?>("FechaAlta")
+                        .HasColumnType("timestamp");
+
+                    b.Property<string>("ImagenOriginal")
+                        .HasColumnType("varchar");
+
+                    b.Property<long?>("ImagenPeso")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ImagenServidor")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<bool?>("Mostrar")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Titulo")
+                        .HasColumnType("varchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Convenios");
                 });
 
             modelBuilder.Entity("BaratariaBackend.Models.Entities.Deporte", b =>
@@ -195,24 +219,6 @@ namespace BaratariaBackend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("EnlacesSorteo");
-                });
-
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.Imagen", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Nombre")
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("varchar");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Imagenes");
                 });
 
             modelBuilder.Entity("BaratariaBackend.Models.Entities.Socio", b =>

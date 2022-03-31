@@ -2538,7 +2538,6 @@ C:\Users\U179240\Documents\Barataria\BackEndBarataria\BaratariaBackend\bin\Debug
 C:\Users\U179240\Documents\Barataria\BackEndBarataria\BaratariaBackend\bin\Debug\net5.0\runtimes\win-arm64\lib\net5.0\dotnet-aspnet-codegenerator-design.exe
 C:\Users\U179240\Documents\Barataria\BackEndBarataria\BaratariaBackend\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 C:\Users\U179240\Documents\Barataria\BackEndBarataria\BaratariaBackend\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\U179240\Documents\Barataria\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\BaratariaBackend.csproj.AssemblyReference.cache
 C:\Users\U179240\Documents\Barataria\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\BaratariaBackend.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\U179240\Documents\Barataria\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\BaratariaBackend.AssemblyInfoInputs.cache
 C:\Users\U179240\Documents\Barataria\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\BaratariaBackend.AssemblyInfo.cs

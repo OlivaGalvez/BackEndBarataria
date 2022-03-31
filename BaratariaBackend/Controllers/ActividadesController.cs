@@ -64,7 +64,7 @@ namespace BaratariaBackend.Controllers
                 {
                     Id = actividad.Id,
                     FechaAlta = actividad.FechaAlta,
-                    FechaBaja = actividad.FechaBaja,
+                   // FechaBaja = actividad.FechaBaja,
                     Titulo = actividad.Titulo,
                     Texto = actividad.Texto,
                     Mostrar = actividad.Mostrar,
@@ -100,7 +100,7 @@ namespace BaratariaBackend.Controllers
             {
                 Id = actividad.Id,
                 FechaAlta = actividad.FechaAlta,
-                FechaBaja = actividad.FechaBaja,
+                //FechaBaja = actividad.FechaBaja,
                 Titulo = actividad.Titulo,
                 Texto = actividad.Texto,
                 Mostrar = actividad.Mostrar,
@@ -141,7 +141,7 @@ namespace BaratariaBackend.Controllers
             }
             act.Titulo = actividadVewModel.Titulo;
             act.FechaAlta = actividadVewModel.FechaAlta;
-            act.FechaBaja = actividadVewModel.FechaBaja;
+           // act.FechaBaja = actividadVewModel.FechaBaja;
             act.Mostrar = actividadVewModel.Mostrar;
             act.Texto = actividadVewModel.Texto;
             if (imagen != null)
@@ -240,7 +240,7 @@ namespace BaratariaBackend.Controllers
                     {
                         Titulo = actividadVewModel.Titulo,
                         FechaAlta = actividadVewModel.FechaAlta,
-                        FechaBaja = actividadVewModel.FechaBaja,
+                      //  FechaBaja = actividadVewModel.FechaBaja,
                         Mostrar = actividadVewModel.Mostrar,
                         Texto = actividadVewModel.Texto,
                         ImagenServidor = actividadVewModel.ImagenServidor,
