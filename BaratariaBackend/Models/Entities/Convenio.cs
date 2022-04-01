@@ -20,5 +20,7 @@ namespace BaratariaBackend.Models.Entities
         public string ImagenServidor { get; set; }
         [Column(TypeName = "bigint")]
         public long? ImagenPeso { get; set; }
+        [Column(TypeName = "varchar")]
+        public string Url { get; set; }
     }
 }
