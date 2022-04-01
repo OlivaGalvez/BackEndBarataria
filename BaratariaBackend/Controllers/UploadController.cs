@@ -17,7 +17,14 @@ namespace BaratariaBackend.Controllers
         public UploadController() 
         {
             isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
-            if (isDevelopment) pathImagen = "C:\\repositorios\\";
+            if (isDevelopment)
+            {
+                pathImagen = "C:\\repositorios\\";
+            }
+            else {
+                pathImagen = "/etc/repositorios/";
+            }
+            
         }
 
         [HttpPost, DisableRequestSizeLimit]

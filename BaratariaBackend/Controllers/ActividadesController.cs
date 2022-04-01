@@ -34,6 +34,10 @@ namespace BaratariaBackend.Controllers
                 pathImagen = "C:\\repositorios\\imagenes\\";
                 pathDoc = "C:\\repositorios\\documentos\\";
             }
+            else {
+                pathImagen = "/etc/repositorios/imagenes/";
+                pathDoc = "/etc/repositorios/documentos/";
+            }
         }
 
         // GET: api/Actividades
