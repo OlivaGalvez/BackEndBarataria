@@ -68,7 +68,6 @@ namespace BaratariaBackend.Controllers
                 {
                     Id = actividad.Id,
                     FechaAlta = actividad.FechaAlta,
-                   // FechaBaja = actividad.FechaBaja,
                     Titulo = actividad.Titulo,
                     Texto = actividad.Texto,
                     Mostrar = actividad.Mostrar,
