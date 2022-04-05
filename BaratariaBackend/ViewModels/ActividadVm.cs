@@ -13,7 +13,8 @@ namespace BaratariaBackend.ViewModels
         public int? IdTpActividad { get; set; }
         public string Titulo { get; set; }
         public DateTime? FechaAlta { get; set; }
-        public DateTime? FechaBaja { get; set; }
+        public DateTime? FechaInicio { get; set; }
+        public DateTime? FechaFin { get; set; }
         public bool? Mostrar { get; set; }
         public string Texto { get; set; }
         public string ImagenServidor { get; set; }

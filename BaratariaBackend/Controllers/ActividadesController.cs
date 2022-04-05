@@ -49,7 +49,7 @@ namespace BaratariaBackend.Controllers
 
             if (portal == true)
             {
-                list = await _context.Actividades.Where(i => i.Mostrar == true).OrderByDescending(i=>i.FechaAlta).ToListAsync();
+                list = await _context.Actividades.Where(i => i.Mostrar == true).OrderByDescending(i=>i.FechaInicio).ToListAsync();
             }
             else {
                 list = await _context.Actividades.OrderByDescending(i => i.FechaAlta).ToListAsync();
@@ -68,6 +68,8 @@ namespace BaratariaBackend.Controllers
                 {
                     Id = actividad.Id,
                     FechaAlta = actividad.FechaAlta,
+                    FechaInicio = actividad.FechaInicio,
+                    FechaFin = actividad.FechaFin,
                     Titulo = actividad.Titulo,
                     Texto = actividad.Texto,
                     Mostrar = actividad.Mostrar,
@@ -103,7 +105,8 @@ namespace BaratariaBackend.Controllers
             {
                 Id = actividad.Id,
                 FechaAlta = actividad.FechaAlta,
-                //FechaBaja = actividad.FechaBaja,
+                FechaInicio = actividad.FechaInicio,
+                FechaFin = actividad.FechaFin,
                 Titulo = actividad.Titulo,
                 Texto = actividad.Texto,
                 Mostrar = actividad.Mostrar,
@@ -144,7 +147,8 @@ namespace BaratariaBackend.Controllers
             }
             act.Titulo = actividadVewModel.Titulo;
             act.FechaAlta = actividadVewModel.FechaAlta;
-           // act.FechaBaja = actividadVewModel.FechaBaja;
+            act.FechaInicio = actividadVewModel.FechaInicio;
+            act.FechaFin = actividadVewModel.FechaFin;
             act.Mostrar = actividadVewModel.Mostrar;
             act.Texto = actividadVewModel.Texto;
             if (imagen != null)
@@ -243,7 +247,8 @@ namespace BaratariaBackend.Controllers
                     {
                         Titulo = actividadVewModel.Titulo,
                         FechaAlta = actividadVewModel.FechaAlta,
-                      //  FechaBaja = actividadVewModel.FechaBaja,
+                        FechaInicio = actividadVewModel.FechaInicio,
+                        FechaFin = actividadVewModel.FechaFin,
                         Mostrar = actividadVewModel.Mostrar,
                         Texto = actividadVewModel.Texto,
                         ImagenServidor = actividadVewModel.ImagenServidor,

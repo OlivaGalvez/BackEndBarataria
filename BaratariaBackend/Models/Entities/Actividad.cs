@@ -15,6 +15,10 @@ namespace BaratariaBackend.Models.Entities
         public string Titulo { get; set; }
         [Column(TypeName = "timestamp")]
         public DateTime? FechaAlta { get; set; }
+        [Column(TypeName = "timestamp")]
+        public DateTime? FechaInicio { get; set; }
+        [Column(TypeName = "timestamp")]
+        public DateTime? FechaFin { get; set; }
         [Column(TypeName = "boolean")]
         public bool? Mostrar { get; set; }
         [Column(TypeName = "varchar")]
