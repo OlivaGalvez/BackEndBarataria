@@ -75,29 +75,70 @@ namespace BaratariaBackend.Controllers
 
         // GET: api/Enlaces/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Enlace>> GetEnlaces(int id)
+        public async Task<ActionResult<EnlaceVm>> GetEnlaces(int id)
         {
-            var actividad = await _context.Enlaces.FindAsync(id);
+            var enlace = await _context.Enlaces.FindAsync(id);
 
-            if (actividad == null)
+            if (enlace == null)
             {
                 return NotFound();
             }
 
-            return actividad;
+            byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + enlace.ImagenServidor);
+            string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+
+            EnlaceVm vm = new()
+            {
+                Id = enlace.Id,
+                FechaAlta = enlace.FechaAlta,
+                Titulo = enlace.Titulo,
+                Mostrar = enlace.Mostrar,
+                ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation,
+                Url = enlace.Url
+            };
+
+            return vm;
         }
 
         // PUT: api/Enlaces/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEnlaces(int id, Enlace enlace)
+        public async Task<IActionResult> PutEnlaces(int id, [FromForm] string enlace, [FromForm] IFormFile imagen)
         {
-            if (id != enlace.Id)
+            var folderName = "imagenes";
+            var enlaceVewModel = JsonConvert.DeserializeObject<EnlaceVm>(enlace);
+            if (enlaceVewModel.Id != id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(enlace).State = EntityState.Modified;
+            Enlace enl = _context.Enlaces.Find(id);
+            if (enl == null)
+            {
+                return BadRequest();
+            }
+
+            if (imagen != null && imagen.Length > 0)
+            {
+                var fullPath = Path.Combine(pathImagen, enlaceVewModel.ImagenServidor);
+                var dbPath = Path.Combine(folderName, enlaceVewModel.ImagenServidor);
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    imagen.CopyTo(stream);
+                }
+            }
+            enl.Titulo = enlaceVewModel.Titulo;
+            enl.FechaAlta = enlaceVewModel.FechaAlta;
+            enl.Mostrar = enlaceVewModel.Mostrar;
+            enl.Url = enlaceVewModel.Url;
+            if (imagen != null)
+            {
+                enl.ImagenServidor = enlaceVewModel.ImagenServidor;
+                enl.ImagenPeso = imagen.Length;
+                enl.ImagenOriginal = imagen.FileName;
+            }
+
+            _context.Entry(enl).State = EntityState.Modified;
 
             try
             {
@@ -105,7 +146,7 @@ namespace BaratariaBackend.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!EnlacesExists(id))
+                if (!EnlacesExists(enlaceVewModel.Id))
                 {
                     return NotFound();
                 }
@@ -165,13 +206,13 @@ namespace BaratariaBackend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEnlaces(int id)
         {
-            var actividad = await _context.Enlaces.FindAsync(id);
-            if (actividad == null)
+            var enlace = await _context.Enlaces.FindAsync(id);
+            if (enlace == null)
             {
                 return NotFound();
             }
 
-            _context.Enlaces.Remove(actividad);
+            _context.Enlaces.Remove(enlace);
             await _context.SaveChangesAsync();
 
             return NoContent();
