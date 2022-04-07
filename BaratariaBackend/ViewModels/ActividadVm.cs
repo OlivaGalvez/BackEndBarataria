@@ -19,7 +19,7 @@ namespace BaratariaBackend.ViewModels
         public string Texto { get; set; }
         public string ImagenServidor { get; set; }
         public string ImagenServidorBase64 { get; set; }
-        public List<EnlaceActividad> ListEnlaces { get; set; }
+        public List<DireccionWeb> ListEnlaces { get; set; }
         public List<Documento> ListDocumentos { get; set; }
     }
 }

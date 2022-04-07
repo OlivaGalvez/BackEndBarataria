@@ -12,7 +12,7 @@ namespace BaratariaBackend.Models.Entities
         [Key]
         public int Id { get; set; }
         public int? ActividadId { get; set; }
-        public int? SocioId { get; set; }
+        public int? ConvenioId { get; set; }
         [Column(TypeName = "varchar(200)")]
         public string Nombre { get; set; }
         [Column(TypeName = "varchar(200)")]
@@ -28,6 +28,6 @@ namespace BaratariaBackend.Models.Entities
         [Column(TypeName = "boolean")]
         public bool? Privado { get; set; }
 
-        public virtual ICollection<TpDocumento> TpDocumentos { get; set; }
+       // public virtual ICollection<TpDocumento> TpDocumentos { get; set; }
     }
 }

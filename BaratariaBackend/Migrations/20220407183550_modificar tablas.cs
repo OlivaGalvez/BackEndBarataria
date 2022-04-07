@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace BaratariaBackend.Migrations
 {
-    public partial class prueba : Migration
+    public partial class modificartablas : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,6 +30,25 @@ namespace BaratariaBackend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Convenios",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Titulo = table.Column<string>(type: "varchar(200)", nullable: true),
+                    FechaAlta = table.Column<DateTime>(type: "timestamp", nullable: true),
+                    Mostrar = table.Column<bool>(type: "boolean", nullable: true),
+                    Texto = table.Column<string>(type: "varchar", nullable: true),
+                    ImagenOriginal = table.Column<string>(type: "varchar(200)", nullable: true),
+                    ImagenServidor = table.Column<string>(type: "varchar(200)", nullable: true),
+                    ImagenPeso = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Convenios", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Enlaces",
                 columns: table => new
                 {
@@ -49,13 +68,41 @@ namespace BaratariaBackend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DireccionWebs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ActividadId = table.Column<int>(type: "integer", nullable: true),
+                    ConvenioId = table.Column<int>(type: "integer", nullable: true),
+                    Nombre = table.Column<string>(type: "varchar(200)", nullable: true),
+                    Url = table.Column<string>(type: "varchar", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DireccionWebs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DireccionWebs_Actividades_ActividadId",
+                        column: x => x.ActividadId,
+                        principalTable: "Actividades",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_DireccionWebs_Convenios_ConvenioId",
+                        column: x => x.ConvenioId,
+                        principalTable: "Convenios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Documentos",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ActividadId = table.Column<int>(type: "integer", nullable: true),
-                    SocioId = table.Column<int>(type: "integer", nullable: true),
+                    ConvenioId = table.Column<int>(type: "integer", nullable: true),
                     Nombre = table.Column<string>(type: "varchar(200)", nullable: true),
                     Original = table.Column<string>(type: "varchar(200)", nullable: true),
                     Servidor = table.Column<string>(type: "varchar(500)", nullable: true),
@@ -73,48 +120,23 @@ namespace BaratariaBackend.Migrations
                         principalTable: "Actividades",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EnlacesActividad",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ActividadId = table.Column<int>(type: "integer", nullable: false),
-                    Nombre = table.Column<string>(type: "varchar(200)", nullable: true),
-                    Url = table.Column<string>(type: "varchar", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EnlacesActividad", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EnlacesActividad_Actividades_ActividadId",
-                        column: x => x.ActividadId,
-                        principalTable: "Actividades",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TpDocumentos",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Descripcion = table.Column<string>(type: "varchar(200)", nullable: true),
-                    DocumentoId = table.Column<int>(type: "integer", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TpDocumentos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TpDocumentos_Documentos_DocumentoId",
-                        column: x => x.DocumentoId,
-                        principalTable: "Documentos",
+                        name: "FK_Documentos_Convenios_ConvenioId",
+                        column: x => x.ConvenioId,
+                        principalTable: "Convenios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DireccionWebs_ActividadId",
+                table: "DireccionWebs",
+                column: "ActividadId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DireccionWebs_ConvenioId",
+                table: "DireccionWebs",
+                column: "ConvenioId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Documentos_ActividadId",
@@ -122,32 +144,27 @@ namespace BaratariaBackend.Migrations
                 column: "ActividadId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EnlacesActividad_ActividadId",
-                table: "EnlacesActividad",
-                column: "ActividadId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TpDocumentos_DocumentoId",
-                table: "TpDocumentos",
-                column: "DocumentoId");
+                name: "IX_Documentos_ConvenioId",
+                table: "Documentos",
+                column: "ConvenioId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Enlaces");
-
-            migrationBuilder.DropTable(
-                name: "EnlacesActividad");
-
-            migrationBuilder.DropTable(
-                name: "TpDocumentos");
+                name: "DireccionWebs");
 
             migrationBuilder.DropTable(
                 name: "Documentos");
 
             migrationBuilder.DropTable(
+                name: "Enlaces");
+
+            migrationBuilder.DropTable(
                 name: "Actividades");
+
+            migrationBuilder.DropTable(
+                name: "Convenios");
         }
     }
 }

@@ -7,11 +7,16 @@ using System.Threading.Tasks;
 
 namespace BaratariaBackend.Models.Entities
 {
-    public class Socio
+    public class DireccionWeb
     {
         [Key]
         public int Id { get; set; }
-        [Column(TypeName = "varchar(50)")]
+        public int? ActividadId { get; set; }
+        public int? ConvenioId { get; set; }
+        [Column(TypeName = "varchar(200)")]
         public string Nombre { get; set; }
+        [Column(TypeName = "varchar")]
+        public string Url { get; set; }
+
     }
 }

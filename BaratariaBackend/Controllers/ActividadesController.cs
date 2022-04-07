@@ -61,7 +61,7 @@ namespace BaratariaBackend.Controllers
                 byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + actividad.ImagenServidor);
                 string base64ImageRepresentation = Convert.ToBase64String(imageArray);
 
-                List<EnlaceActividad> listEnlaces = _context.EnlacesActividad.Where(i => i.ActividadId == actividad.Id).ToList();
+                List<DireccionWeb> listEnlaces = _context.DireccionWebs.Where(i => i.ActividadId == actividad.Id).ToList();
                 List<Documento> listDocumentos = _context.Documentos.Where(i => i.ActividadId == actividad.Id).ToList();
 
                 ActividadVm vm = new()
@@ -98,7 +98,7 @@ namespace BaratariaBackend.Controllers
             byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + actividad.ImagenServidor);
             string base64ImageRepresentation = Convert.ToBase64String(imageArray);
 
-            List<EnlaceActividad> listEnlaces = _context.EnlacesActividad.Where(i => i.ActividadId == actividad.Id).ToList();
+            List<DireccionWeb> listEnlaces = _context.DireccionWebs.Where(i => i.ActividadId == actividad.Id).ToList();
             List<Documento> listDocumentos = _context.Documentos.Where(i => i.ActividadId == actividad.Id).ToList();
 
             ActividadVm vm = new()
@@ -161,7 +161,7 @@ namespace BaratariaBackend.Controllers
 
             _context.Entry(act).State = EntityState.Modified;
 
-            List<EnlaceActividad> listActBorrado = _context.EnlacesActividad.Where(i => i.ActividadId == id).ToList();
+            List<DireccionWeb> listActBorrado = _context.DireccionWebs.Where(i => i.ActividadId == id).ToList();
             if (listActBorrado != null) _context.RemoveRange(listActBorrado);
             List<Documento> listDocBorrado = _context.Documentos.Where(i => i.ActividadId == id).ToList();
             if (listDocBorrado != null) _context.RemoveRange(listDocBorrado);
@@ -169,10 +169,10 @@ namespace BaratariaBackend.Controllers
 
             if (actividadVewModel.ListEnlaces.Count() > 0)
             {
-                List<EnlaceActividad> listEnlaces = new();
-                foreach (EnlaceActividad enlace in actividadVewModel.ListEnlaces)
+                List<DireccionWeb> listEnlaces = new();
+                foreach (DireccionWeb enlace in actividadVewModel.ListEnlaces)
                 {
-                    EnlaceActividad en = new()
+                    DireccionWeb en = new()
                     {
                         ActividadId = act.Id,
                         Nombre = enlace.Nombre,
@@ -180,7 +180,7 @@ namespace BaratariaBackend.Controllers
                     };
                     listEnlaces.Add(en);
                 }
-                _context.EnlacesActividad.AddRange(listEnlaces);
+                _context.DireccionWebs.AddRange(listEnlaces);
             }
 
             if (actividadVewModel.ListDocumentos.Count() > 0)
@@ -262,10 +262,10 @@ namespace BaratariaBackend.Controllers
 
                 if (actividadVewModel.ListEnlaces.Count() > 0)
                 {
-                    List<EnlaceActividad> listEnlaces = new ();
-                    foreach (EnlaceActividad enlace in actividadVewModel.ListEnlaces)
+                    List<DireccionWeb> listEnlaces = new ();
+                    foreach (DireccionWeb enlace in actividadVewModel.ListEnlaces)
                     {
-                        EnlaceActividad en = new()
+                        DireccionWeb en = new()
                         {
                             ActividadId = act.Id,
                             Nombre = enlace.Nombre,
@@ -273,7 +273,7 @@ namespace BaratariaBackend.Controllers
                         };
                         listEnlaces.Add(en);
                     }
-                    _context.EnlacesActividad.AddRange(listEnlaces);
+                    _context.DireccionWebs.AddRange(listEnlaces);
                     await _context.SaveChangesAsync();
                 }
 
@@ -310,20 +310,33 @@ namespace BaratariaBackend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteActividad(int id)
         {
-            var actividad = await _context.Actividades.FindAsync(id);
-            if (actividad == null)
+            try 
             {
-                return NotFound();
+                var actividad = await _context.Actividades.FindAsync(id);
+                if (actividad == null)
+                {
+                    return NotFound();
+                }
+
+                List<Documento> listDocBorrado = _context.Documentos.Where(i => i.ActividadId == id).ToList();
+                if (listDocBorrado != null) _context.RemoveRange(listDocBorrado);
+
+                List<DireccionWeb> listEnlaces = _context.DireccionWebs.Where(i => i.ActividadId == id).ToList();
+                if (listEnlaces != null) _context.RemoveRange(listEnlaces);
+
+                await _context.SaveChangesAsync();
+
+
+
+                _context.Actividades.Remove(actividad);
+                await _context.SaveChangesAsync();
+
+                return NoContent();
             }
-
-            List<Documento> listDocBorrado = _context.Documentos.Where(i => i.ActividadId == id).ToList();
-            if (listDocBorrado != null) _context.RemoveRange(listDocBorrado);
-            await _context.SaveChangesAsync();
-
-            _context.Actividades.Remove(actividad);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
         }
 
         private bool ActividadExists(int id)

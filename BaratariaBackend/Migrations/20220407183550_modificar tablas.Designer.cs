@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BaratariaBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220407170749_prueba")]
-    partial class prueba
+    [Migration("20220407183550_modificar tablas")]
+    partial class modificartablas
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -60,6 +60,67 @@ namespace BaratariaBackend.Migrations
                     b.ToTable("Actividades");
                 });
 
+            modelBuilder.Entity("BaratariaBackend.Models.Entities.Convenio", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime?>("FechaAlta")
+                        .HasColumnType("timestamp");
+
+                    b.Property<string>("ImagenOriginal")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<long?>("ImagenPeso")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ImagenServidor")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<bool?>("Mostrar")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Texto")
+                        .HasColumnType("varchar");
+
+                    b.Property<string>("Titulo")
+                        .HasColumnType("varchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Convenios");
+                });
+
+            modelBuilder.Entity("BaratariaBackend.Models.Entities.DireccionWeb", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int?>("ActividadId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ConvenioId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("varchar");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActividadId");
+
+                    b.HasIndex("ConvenioId");
+
+                    b.ToTable("DireccionWebs");
+                });
+
             modelBuilder.Entity("BaratariaBackend.Models.Entities.Documento", b =>
                 {
                     b.Property<int>("Id")
@@ -68,6 +129,9 @@ namespace BaratariaBackend.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<int?>("ActividadId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ConvenioId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("Fecha")
@@ -85,9 +149,6 @@ namespace BaratariaBackend.Migrations
                     b.Property<string>("Servidor")
                         .HasColumnType("varchar(500)");
 
-                    b.Property<int?>("SocioId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Tamanio")
                         .HasColumnType("varchar(500)");
 
@@ -97,6 +158,8 @@ namespace BaratariaBackend.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ActividadId");
+
+                    b.HasIndex("ConvenioId");
 
                     b.ToTable("Documentos");
                 });
@@ -134,47 +197,15 @@ namespace BaratariaBackend.Migrations
                     b.ToTable("Enlaces");
                 });
 
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.EnlaceActividad", b =>
+            modelBuilder.Entity("BaratariaBackend.Models.Entities.DireccionWeb", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                    b.HasOne("BaratariaBackend.Models.Entities.Actividad", null)
+                        .WithMany("DireccionWebs")
+                        .HasForeignKey("ActividadId");
 
-                    b.Property<int>("ActividadId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Nombre")
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("varchar");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActividadId");
-
-                    b.ToTable("EnlacesActividad");
-                });
-
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.TpDocumento", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Descripcion")
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<int?>("DocumentoId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DocumentoId");
-
-                    b.ToTable("TpDocumentos");
+                    b.HasOne("BaratariaBackend.Models.Entities.Convenio", null)
+                        .WithMany("DireccionWebs")
+                        .HasForeignKey("ConvenioId");
                 });
 
             modelBuilder.Entity("BaratariaBackend.Models.Entities.Documento", b =>
@@ -182,34 +213,24 @@ namespace BaratariaBackend.Migrations
                     b.HasOne("BaratariaBackend.Models.Entities.Actividad", null)
                         .WithMany("Documentos")
                         .HasForeignKey("ActividadId");
-                });
 
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.EnlaceActividad", b =>
-                {
-                    b.HasOne("BaratariaBackend.Models.Entities.Actividad", null)
-                        .WithMany("EnlaceActividads")
-                        .HasForeignKey("ActividadId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.TpDocumento", b =>
-                {
-                    b.HasOne("BaratariaBackend.Models.Entities.Documento", null)
-                        .WithMany("TpDocumentos")
-                        .HasForeignKey("DocumentoId");
+                    b.HasOne("BaratariaBackend.Models.Entities.Convenio", null)
+                        .WithMany("Documentos")
+                        .HasForeignKey("ConvenioId");
                 });
 
             modelBuilder.Entity("BaratariaBackend.Models.Entities.Actividad", b =>
                 {
-                    b.Navigation("Documentos");
+                    b.Navigation("DireccionWebs");
 
-                    b.Navigation("EnlaceActividads");
+                    b.Navigation("Documentos");
                 });
 
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.Documento", b =>
+            modelBuilder.Entity("BaratariaBackend.Models.Entities.Convenio", b =>
                 {
-                    b.Navigation("TpDocumentos");
+                    b.Navigation("DireccionWebs");
+
+                    b.Navigation("Documentos");
                 });
 #pragma warning restore 612, 618
         }

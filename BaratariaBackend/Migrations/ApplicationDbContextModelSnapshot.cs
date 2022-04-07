@@ -58,27 +58,27 @@ namespace BaratariaBackend.Migrations
                     b.ToTable("Actividades");
                 });
 
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.Deporte", b =>
+            modelBuilder.Entity("BaratariaBackend.Models.Entities.Convenio", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("Fecha")
-                        .HasColumnType("date");
-
-                    b.Property<DateTime>("Hora")
+                    b.Property<DateTime?>("FechaAlta")
                         .HasColumnType("timestamp");
 
                     b.Property<string>("ImagenOriginal")
                         .HasColumnType("varchar(200)");
 
-                    b.Property<long>("ImagenPeso")
+                    b.Property<long?>("ImagenPeso")
                         .HasColumnType("bigint");
 
                     b.Property<string>("ImagenServidor")
                         .HasColumnType("varchar(200)");
+
+                    b.Property<bool?>("Mostrar")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Texto")
                         .HasColumnType("varchar");
@@ -88,7 +88,35 @@ namespace BaratariaBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Deportes");
+                    b.ToTable("Convenios");
+                });
+
+            modelBuilder.Entity("BaratariaBackend.Models.Entities.DireccionWeb", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int?>("ActividadId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ConvenioId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("varchar");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActividadId");
+
+                    b.HasIndex("ConvenioId");
+
+                    b.ToTable("DireccionWebs");
                 });
 
             modelBuilder.Entity("BaratariaBackend.Models.Entities.Documento", b =>
@@ -99,6 +127,9 @@ namespace BaratariaBackend.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<int?>("ActividadId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ConvenioId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("Fecha")
@@ -116,9 +147,6 @@ namespace BaratariaBackend.Migrations
                     b.Property<string>("Servidor")
                         .HasColumnType("varchar(500)");
 
-                    b.Property<int?>("SocioId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Tamanio")
                         .HasColumnType("varchar(500)");
 
@@ -128,6 +156,8 @@ namespace BaratariaBackend.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ActividadId");
+
+                    b.HasIndex("ConvenioId");
 
                     b.ToTable("Documentos");
                 });
@@ -165,206 +195,15 @@ namespace BaratariaBackend.Migrations
                     b.ToTable("Enlaces");
                 });
 
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.EnlaceActividad", b =>
+            modelBuilder.Entity("BaratariaBackend.Models.Entities.DireccionWeb", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                    b.HasOne("BaratariaBackend.Models.Entities.Actividad", null)
+                        .WithMany("DireccionWebs")
+                        .HasForeignKey("ActividadId");
 
-                    b.Property<int>("ActividadId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Nombre")
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("varchar");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActividadId");
-
-                    b.ToTable("EnlacesActividad");
-                });
-
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.EnlaceDeporte", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("DeporteId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Nombre")
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("varchar");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EnlacesDeporte");
-                });
-
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.EnlaceSorteo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Nombre")
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<int>("SorteoId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("varchar");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EnlacesSorteo");
-                });
-
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.Socio", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Nombre")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int?>("SorteoId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SorteoId");
-
-                    b.ToTable("Socios");
-                });
-
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.SocioSorteoRlExcluidos", b =>
-                {
-                    b.Property<int>("IdSocio")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("IdSorteo")
-                        .HasColumnType("integer");
-
-                    b.HasKey("IdSocio", "IdSorteo");
-
-                    b.ToTable("SociosSorteoRlExcluidos");
-                });
-
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.SocioSorteoRlGanadores", b =>
-                {
-                    b.Property<int>("IdSocio")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("IdSorteo")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("SorteoId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("IdSocio", "IdSorteo");
-
-                    b.HasIndex("SorteoId");
-
-                    b.ToTable("SociosSorteoRlGanadores");
-                });
-
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.Sorteo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("DiasRepeticion")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("Excluyente")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("Fecha")
-                        .HasColumnType("date");
-
-                    b.Property<DateTime>("FechaBaja")
-                        .HasColumnType("timestamp");
-
-                    b.Property<DateTime>("FechaSorteo")
-                        .HasColumnType("timestamp");
-
-                    b.Property<DateTime>("Hora")
-                        .HasColumnType("timestamp");
-
-                    b.Property<int>("IdTpSorteo")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ImagenOriginal")
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<long>("ImagenPeso")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("ImagenServidor")
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<bool?>("Mostrar")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Texto")
-                        .HasColumnType("varchar");
-
-                    b.Property<string>("Titulo")
-                        .HasColumnType("varchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Sorteos");
-                });
-
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.TpDocumento", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Descripcion")
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<int?>("DocumentoId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DocumentoId");
-
-                    b.ToTable("TpDocumentos");
-                });
-
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.TpSorteo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Descripcion")
-                        .HasColumnType("varchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TpSorteos");
+                    b.HasOne("BaratariaBackend.Models.Entities.Convenio", null)
+                        .WithMany("DireccionWebs")
+                        .HasForeignKey("ConvenioId");
                 });
 
             modelBuilder.Entity("BaratariaBackend.Models.Entities.Documento", b =>
@@ -372,55 +211,24 @@ namespace BaratariaBackend.Migrations
                     b.HasOne("BaratariaBackend.Models.Entities.Actividad", null)
                         .WithMany("Documentos")
                         .HasForeignKey("ActividadId");
-                });
 
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.EnlaceActividad", b =>
-                {
-                    b.HasOne("BaratariaBackend.Models.Entities.Actividad", null)
-                        .WithMany("EnlaceActividads")
-                        .HasForeignKey("ActividadId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.Socio", b =>
-                {
-                    b.HasOne("BaratariaBackend.Models.Entities.Sorteo", null)
-                        .WithMany("SocioSorteoRlExcluidos")
-                        .HasForeignKey("SorteoId");
-                });
-
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.SocioSorteoRlGanadores", b =>
-                {
-                    b.HasOne("BaratariaBackend.Models.Entities.Sorteo", null)
-                        .WithMany("SocioSorteoRlGanadores")
-                        .HasForeignKey("SorteoId");
-                });
-
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.TpDocumento", b =>
-                {
-                    b.HasOne("BaratariaBackend.Models.Entities.Documento", null)
-                        .WithMany("TpDocumentos")
-                        .HasForeignKey("DocumentoId");
+                    b.HasOne("BaratariaBackend.Models.Entities.Convenio", null)
+                        .WithMany("Documentos")
+                        .HasForeignKey("ConvenioId");
                 });
 
             modelBuilder.Entity("BaratariaBackend.Models.Entities.Actividad", b =>
                 {
+                    b.Navigation("DireccionWebs");
+
                     b.Navigation("Documentos");
-
-                    b.Navigation("EnlaceActividads");
                 });
 
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.Documento", b =>
+            modelBuilder.Entity("BaratariaBackend.Models.Entities.Convenio", b =>
                 {
-                    b.Navigation("TpDocumentos");
-                });
+                    b.Navigation("DireccionWebs");
 
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.Sorteo", b =>
-                {
-                    b.Navigation("SocioSorteoRlExcluidos");
-
-                    b.Navigation("SocioSorteoRlGanadores");
+                    b.Navigation("Documentos");
                 });
 #pragma warning restore 612, 618
         }

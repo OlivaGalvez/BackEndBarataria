@@ -32,6 +32,6 @@ namespace BaratariaBackend.Models.Entities
 
 
         public virtual ICollection<Documento> Documentos { get; set; }
-        public virtual ICollection<EnlaceActividad> EnlaceActividads { get; set; }
+        public virtual ICollection<DireccionWeb> DireccionWebs { get; set; }
     }
 }

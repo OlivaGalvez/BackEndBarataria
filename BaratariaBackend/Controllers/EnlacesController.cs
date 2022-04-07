@@ -206,16 +206,23 @@ namespace BaratariaBackend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEnlaces(int id)
         {
-            var enlace = await _context.Enlaces.FindAsync(id);
-            if (enlace == null)
+            try 
             {
-                return NotFound();
+                var enlace = await _context.Enlaces.FindAsync(id);
+                if (enlace == null)
+                {
+                    return NotFound();
+                }
+
+                _context.Enlaces.Remove(enlace);
+                await _context.SaveChangesAsync();
+
+                return NoContent();
             }
-
-            _context.Enlaces.Remove(enlace);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
         }
 
         private bool EnlacesExists(int id)
