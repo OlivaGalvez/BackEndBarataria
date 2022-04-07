@@ -58,39 +58,6 @@ namespace BaratariaBackend.Migrations
                     b.ToTable("Actividades");
                 });
 
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.Convenio", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTime?>("FechaAlta")
-                        .HasColumnType("timestamp");
-
-                    b.Property<string>("ImagenOriginal")
-                        .HasColumnType("varchar");
-
-                    b.Property<long?>("ImagenPeso")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("ImagenServidor")
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<bool?>("Mostrar")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Titulo")
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("varchar");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Convenios");
-                });
-
             modelBuilder.Entity("BaratariaBackend.Models.Entities.Deporte", b =>
                 {
                     b.Property<int>("Id")
@@ -163,6 +130,39 @@ namespace BaratariaBackend.Migrations
                     b.HasIndex("ActividadId");
 
                     b.ToTable("Documentos");
+                });
+
+            modelBuilder.Entity("BaratariaBackend.Models.Entities.Enlace", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime?>("FechaAlta")
+                        .HasColumnType("timestamp");
+
+                    b.Property<string>("ImagenOriginal")
+                        .HasColumnType("varchar");
+
+                    b.Property<long?>("ImagenPeso")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ImagenServidor")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<bool?>("Mostrar")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Titulo")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("varchar");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Enlaces");
                 });
 
             modelBuilder.Entity("BaratariaBackend.Models.Entities.EnlaceActividad", b =>

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BaratariaBackend.ViewModels
 {
-    public class ConvenioVm
+    public class EnlaceVm
     {
         public int Id { get; set; }
         public string Titulo { get; set; }

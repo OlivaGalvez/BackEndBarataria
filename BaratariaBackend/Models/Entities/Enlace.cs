@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BaratariaBackend.Models.Entities
 {
-    public class Convenio
+    public class Enlace
     {
         [Key]
         public int Id { get; set; }

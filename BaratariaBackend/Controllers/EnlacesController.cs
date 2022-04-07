@@ -15,13 +15,13 @@ namespace BaratariaBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ConveniosController : Controller
+    public class EnlacesController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly bool isDevelopment;
         private readonly string pathImagen;
 
-        public ConveniosController(ApplicationDbContext context)
+        public EnlacesController(ApplicationDbContext context)
         {
             _context = context;
             isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
@@ -35,29 +35,29 @@ namespace BaratariaBackend.Controllers
             }
         }
 
-        // GET: api/Convenioss
+        // GET: api/Enlaces
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ConvenioVm>>> GetConvenios(bool portal = true)
+        public async Task<ActionResult<IEnumerable<EnlaceVm>>> GetEnlaces(bool portal = true)
         {
-            List<ConvenioVm> listVm = new();
-            List<Convenio> list = new();
+            List<EnlaceVm> listVm = new();
+            List<Enlace> list = new();
 
             if (portal == true)
             {
-                list = await _context.Convenios.Where(i => i.Mostrar == true).OrderByDescending(i => i.FechaAlta).ToListAsync();
+                list = await _context.Enlaces.Where(i => i.Mostrar == true).OrderByDescending(i => i.FechaAlta).ToListAsync();
             }
             else
             {
-                list = await _context.Convenios.OrderByDescending(i => i.FechaAlta).ToListAsync();
+                list = await _context.Enlaces.OrderByDescending(i => i.FechaAlta).ToListAsync();
             }
 
-            foreach (Convenio convenio in list)
+            foreach (Enlace convenio in list)
             {
 
                 byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + convenio.ImagenServidor);
                 string base64ImageRepresentation = Convert.ToBase64String(imageArray);
 
-                ConvenioVm vm = new()
+                EnlaceVm vm = new()
                 {
                     Id = convenio.Id,
                     FechaAlta = convenio.FechaAlta,
@@ -73,11 +73,11 @@ namespace BaratariaBackend.Controllers
             return listVm;
         }
 
-        // GET: api/Convenioss/5
+        // GET: api/Enlaces/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Convenio>> GetConvenio(int id)
+        public async Task<ActionResult<Enlace>> GetEnlaces(int id)
         {
-            var actividad = await _context.Convenios.FindAsync(id);
+            var actividad = await _context.Enlaces.FindAsync(id);
 
             if (actividad == null)
             {
@@ -87,17 +87,17 @@ namespace BaratariaBackend.Controllers
             return actividad;
         }
 
-        // PUT: api/Convenioss/5
+        // PUT: api/Enlaces/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutConvenio(int id, Convenio actividad)
+        public async Task<IActionResult> PutEnlaces(int id, Enlace enlace)
         {
-            if (id != actividad.Id)
+            if (id != enlace.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(actividad).State = EntityState.Modified;
+            _context.Entry(enlace).State = EntityState.Modified;
 
             try
             {
@@ -105,7 +105,7 @@ namespace BaratariaBackend.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ConveniosExists(id))
+                if (!EnlacesExists(id))
                 {
                     return NotFound();
                 }
@@ -118,42 +118,42 @@ namespace BaratariaBackend.Controllers
             return NoContent();
         }
 
-        // POST: api/Convenioss
+        // POST: api/Enlaces
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Convenio>> PostConvenio([FromForm] string convenio, [FromForm] IFormFile imagen)
+        public async Task<ActionResult<Enlace>> PostEnlaces([FromForm] string enlace, [FromForm] IFormFile imagen)
         {
             try
             {
-                Convenio con = null;
+                Enlace con = null;
                 var folderName = "imagenes";
-                var convenioVewModel = JsonConvert.DeserializeObject<ConvenioVm>(convenio);
+                var enlaceVewModel = JsonConvert.DeserializeObject<EnlaceVm>(enlace);
 
                 if (imagen.Length > 0)
                 {
-                    var fullPath = Path.Combine(pathImagen, convenioVewModel.ImagenServidor);
-                    var dbPath = Path.Combine(folderName, convenioVewModel.ImagenServidor);
+                    var fullPath = Path.Combine(pathImagen, enlaceVewModel.ImagenServidor);
+                    var dbPath = Path.Combine(folderName, enlaceVewModel.ImagenServidor);
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
                         imagen.CopyTo(stream);
                     }
 
-                    con = new Convenio
+                    con = new Enlace
                     {
-                        Titulo = convenioVewModel.Titulo,
-                        FechaAlta = convenioVewModel.FechaAlta,
-                        Mostrar = convenioVewModel.Mostrar,
-                        ImagenServidor = convenioVewModel.ImagenServidor,
+                        Titulo = enlaceVewModel.Titulo,
+                        FechaAlta = enlaceVewModel.FechaAlta,
+                        Mostrar = enlaceVewModel.Mostrar,
+                        ImagenServidor = enlaceVewModel.ImagenServidor,
                         ImagenPeso = imagen.Length,
                         ImagenOriginal = imagen.FileName,
-                        Url = convenioVewModel.Url
+                        Url = enlaceVewModel.Url
                     };
                 }
 
-                _context.Convenios.Add(con);
+                _context.Enlaces.Add(con);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetConvenios", new { id = con.Id }, con);
+                return CreatedAtAction("GetEnlaces", new { id = con.Id }, con);
             }
             catch (Exception ex)
             {
@@ -161,25 +161,25 @@ namespace BaratariaBackend.Controllers
             }
         }
 
-        // DELETE: api/Convenioss/5
+        // DELETE: api/Enlaces/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteConvenio(int id)
+        public async Task<IActionResult> DeleteEnlaces(int id)
         {
-            var actividad = await _context.Convenios.FindAsync(id);
+            var actividad = await _context.Enlaces.FindAsync(id);
             if (actividad == null)
             {
                 return NotFound();
             }
 
-            _context.Convenios.Remove(actividad);
+            _context.Enlaces.Remove(actividad);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool ConveniosExists(int id)
+        private bool EnlacesExists(int id)
         {
-            return _context.Convenios.Any(e => e.Id == id);
+            return _context.Enlaces.Any(e => e.Id == id);
         }
        
     }
