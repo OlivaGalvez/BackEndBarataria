@@ -1,8 +1,13 @@
 ﻿using BaratariaBackend.Models.Context;
 using BaratariaBackend.Models.Entities;
+using BaratariaBackend.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,17 +18,59 @@ namespace BaratariaBackend.Controllers
     public class ConveniosController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly bool isDevelopment;
+        private readonly string pathImagen;
 
         public ConveniosController(ApplicationDbContext context)
         {
             _context = context;
+            isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+            if (isDevelopment)
+            {
+                pathImagen = "C:\\repositorios\\imagenes\\";
+            }
+            else
+            {
+                pathImagen = "/etc/repositorios/imagenes/";
+            }
         }
 
         // GET: api/Convenioss
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Convenio>>> GetConvenios()
+        public async Task<ActionResult<IEnumerable<ConvenioVm>>> GetConvenios(bool portal = true)
         {
-            return await _context.Convenios.ToListAsync();
+            List<ConvenioVm> listVm = new();
+            List<Convenio> list = new();
+
+            if (portal == true)
+            {
+                list = await _context.Convenios.Where(i => i.Mostrar == true).OrderByDescending(i => i.FechaAlta).ToListAsync();
+            }
+            else
+            {
+                list = await _context.Convenios.OrderByDescending(i => i.FechaAlta).ToListAsync();
+            }
+
+            foreach (Convenio convenio in list)
+            {
+
+                byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + convenio.ImagenServidor);
+                string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+
+                ConvenioVm vm = new()
+                {
+                    Id = convenio.Id,
+                    FechaAlta = convenio.FechaAlta,
+                    Titulo = convenio.Titulo,
+                    Mostrar = convenio.Mostrar,
+                    ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation,
+                    Url = convenio.Url
+                };
+
+                listVm.Add(vm);
+            }
+
+            return listVm;
         }
 
         // GET: api/Convenioss/5
@@ -74,12 +121,44 @@ namespace BaratariaBackend.Controllers
         // POST: api/Convenioss
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Convenio>> PostConvenio(Convenio actividad)
+        public async Task<ActionResult<Convenio>> PostConvenio([FromForm] string convenio, [FromForm] IFormFile imagen)
         {
-            _context.Convenios.Add(actividad);
-            await _context.SaveChangesAsync();
+            try
+            {
+                Convenio con = null;
+                var folderName = "imagenes";
+                var convenioVewModel = JsonConvert.DeserializeObject<ConvenioVm>(convenio);
 
-            return CreatedAtAction("GetConvenios", new { id = actividad.Id }, actividad);
+                if (imagen.Length > 0)
+                {
+                    var fullPath = Path.Combine(pathImagen, convenioVewModel.ImagenServidor);
+                    var dbPath = Path.Combine(folderName, convenioVewModel.ImagenServidor);
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        imagen.CopyTo(stream);
+                    }
+
+                    con = new Convenio
+                    {
+                        Titulo = convenioVewModel.Titulo,
+                        FechaAlta = convenioVewModel.FechaAlta,
+                        Mostrar = convenioVewModel.Mostrar,
+                        ImagenServidor = convenioVewModel.ImagenServidor,
+                        ImagenPeso = imagen.Length,
+                        ImagenOriginal = imagen.FileName,
+                        Url = convenioVewModel.Url
+                    };
+                }
+
+                _context.Convenios.Add(con);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetConvenios", new { id = con.Id }, con);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
         }
 
         // DELETE: api/Convenioss/5
