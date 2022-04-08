@@ -2553,7 +2553,6 @@ C:\Users\U179240\Documents\Barataria\BackEndBarataria\BaratariaBackend\obj\Debug
 C:\Users\U179240\Documents\Barataria\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\ref\BaratariaBackend.dll
 C:\Users\U179240\Documents\Barataria\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\BaratariaBackend.pdb
 C:\Users\U179240\Documents\Barataria\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\BaratariaBackend.genruntimeconfig.cache
-C:\Users\U179240\Documents\Barataria\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\BaratariaBackend.csproj.AssemblyReference.cache
 C:\Users\Oliva\Documents\Barataria\BackEndBarataria\BaratariaBackend\bin\Debug\net5.0\appsettings.Development.json
 C:\Users\Oliva\Documents\Barataria\BackEndBarataria\BaratariaBackend\bin\Debug\net5.0\appsettings.json
 C:\Users\Oliva\Documents\Barataria\BackEndBarataria\BaratariaBackend\bin\Debug\net5.0\BaratariaBackend.StaticWebAssets.xml
