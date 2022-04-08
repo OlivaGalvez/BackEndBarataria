@@ -155,9 +155,9 @@ namespace BaratariaBackend.Controllers
 
             _context.Entry(conv).State = EntityState.Modified;
 
-            List<DireccionWeb> listActBorrado = _context.DireccionWebs.Where(i => i.ActividadId == id).ToList();
+            List<DireccionWeb> listActBorrado = _context.DireccionWebs.Where(i => i.ConvenioId == id).ToList();
             if (listActBorrado != null) _context.RemoveRange(listActBorrado);
-            List<Documento> listDocBorrado = _context.Documentos.Where(i => i.ActividadId == id).ToList();
+            List<Documento> listDocBorrado = _context.Documentos.Where(i => i.ConvenioId == id).ToList();
             if (listDocBorrado != null) _context.RemoveRange(listDocBorrado);
             await _context.SaveChangesAsync();
 
@@ -310,10 +310,10 @@ namespace BaratariaBackend.Controllers
                     return NotFound();
                 }
 
-                List<Documento> listDocBorrado = _context.Documentos.Where(i => i.ActividadId == id).ToList();
+                List<Documento> listDocBorrado = _context.Documentos.Where(i => i.ConvenioId == id).ToList();
                 if (listDocBorrado != null) _context.RemoveRange(listDocBorrado);
 
-                List<DireccionWeb> listEnlaces = _context.DireccionWebs.Where(i => i.ActividadId == id).ToList();
+                List<DireccionWeb> listEnlaces = _context.DireccionWebs.Where(i => i.ConvenioId == id).ToList();
                 if (listEnlaces != null) _context.RemoveRange(listEnlaces);
 
                 await _context.SaveChangesAsync();
