@@ -4,8 +4,10 @@ using BaratariaBackend.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -120,88 +122,86 @@ namespace BaratariaBackend.Controllers
         // PUT: api/Convenios/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutConvenio(int id, [FromForm] string actividad, [FromForm] IFormFile imagen, [FromForm] string documentos)
+        public async Task<IActionResult> PutConvenio(int id, [FromForm] string convenio, [FromForm] IFormFile imagen)
         {
-            //var folderName = "imagenes";
-            //var actividadVewModel = JsonConvert.DeserializeObject<ActividadVm>(actividad);
-            //if (actividadVewModel.Id != id)
-            //{
-            //    return BadRequest();
-            //}
+            var folderName = "imagenes";
+            var convenioVewModel = JsonConvert.DeserializeObject<ConvenioVm>(convenio);
+            if (convenioVewModel.Id != id)
+            {
+                return BadRequest();
+            }
 
-            //Actividad act = _context.Actividades.Find(id);
-            //if (act == null)
-            //{
-            //    return BadRequest();
-            //}
+            Convenio conv = _context.Convenios.Find(id);
+            if (conv == null)
+            {
+                return BadRequest();
+            }
 
-            //if (imagen != null && imagen.Length > 0)
-            //{
-            //    var fullPath = Path.Combine(pathImagen, actividadVewModel.ImagenServidor);
-            //    var dbPath = Path.Combine(folderName, actividadVewModel.ImagenServidor);
-            //    using (var stream = new FileStream(fullPath, FileMode.Create))
-            //    {
-            //        imagen.CopyTo(stream);
-            //    }
-            //}
-            //act.Titulo = actividadVewModel.Titulo;
-            //act.FechaAlta = actividadVewModel.FechaAlta;
-            //act.FechaInicio = actividadVewModel.FechaInicio;
-            //act.FechaFin = actividadVewModel.FechaFin;
-            //act.Mostrar = actividadVewModel.Mostrar;
-            //act.Texto = actividadVewModel.Texto;
-            //if (imagen != null)
-            //{
-            //    act.ImagenServidor = actividadVewModel.ImagenServidor;
-            //    act.ImagenPeso = imagen.Length;
-            //    act.ImagenOriginal = imagen.FileName;
-            //}
+            if (imagen != null && imagen.Length > 0)
+            {
+                var fullPath = Path.Combine(pathImagen, convenioVewModel.ImagenServidor);
+                var dbPath = Path.Combine(folderName, convenioVewModel.ImagenServidor);
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    imagen.CopyTo(stream);
+                }
+            }
+            conv.Titulo = convenioVewModel.Titulo;
+            conv.FechaAlta = convenioVewModel.FechaAlta;
+            conv.Mostrar = convenioVewModel.Mostrar;
+            conv.Texto = convenioVewModel.Texto;
+            if (imagen != null)
+            {
+                conv.ImagenServidor = convenioVewModel.ImagenServidor;
+                conv.ImagenPeso = imagen.Length;
+                conv.ImagenOriginal = imagen.FileName;
+            }
 
 
-            //_context.Entry(act).State = EntityState.Modified;
+            _context.Entry(conv).State = EntityState.Modified;
 
-            //List<DireccionWeb> listActBorrado = _context.DireccionWebs.Where(i => i.ActividadId == id).ToList();
-            //if (listActBorrado != null) _context.RemoveRange(listActBorrado);
-            //List<Documento> listDocBorrado = _context.Documentos.Where(i => i.ActividadId == id).ToList();
-            //if (listDocBorrado != null) _context.RemoveRange(listDocBorrado);
-            //await _context.SaveChangesAsync();
+            List<DireccionWeb> listActBorrado = _context.DireccionWebs.Where(i => i.ActividadId == id).ToList();
+            if (listActBorrado != null) _context.RemoveRange(listActBorrado);
+            List<Documento> listDocBorrado = _context.Documentos.Where(i => i.ActividadId == id).ToList();
+            if (listDocBorrado != null) _context.RemoveRange(listDocBorrado);
+            await _context.SaveChangesAsync();
 
-            //if (actividadVewModel.ListEnlaces.Count() > 0)
-            //{
-            //    List<DireccionWeb> listEnlaces = new();
-            //    foreach (DireccionWeb enlace in actividadVewModel.ListEnlaces)
-            //    {
-            //        DireccionWeb en = new()
-            //        {
-            //            ActividadId = act.Id,
-            //            Nombre = enlace.Nombre,
-            //            Url = enlace.Url
-            //        };
-            //        listEnlaces.Add(en);
-            //    }
-            //    _context.DireccionWebs.AddRange(listEnlaces);
-            //}
+            if (convenioVewModel.ListEnlaces.Count() > 0)
+            {
+                List<DireccionWeb> listEnlaces = new();
+                foreach (DireccionWeb enlace in convenioVewModel.ListEnlaces)
+                {
+                    DireccionWeb en = new()
+                    {
+                        ConvenioId = conv.Id,
+                        Nombre = enlace.Nombre,
+                        Url = enlace.Url
+                    };
+                    listEnlaces.Add(en);
+                }
+                _context.DireccionWebs.AddRange(listEnlaces);
+            }
 
-            //if (actividadVewModel.ListDocumentos.Count() > 0)
-            //{
-            //    List<Documento> listDocumentos = new();
-            //    foreach (Documento documento in actividadVewModel.ListDocumentos)
-            //    {
-            //        Documento doc = new()
-            //        {
-            //            ActividadId = act.Id,
-            //            Nombre = documento.Nombre,
-            //            Original = documento.Original,
-            //            Servidor = documento.Servidor,
-            //            Fecha = DateTime.Now,
-            //            Url = pathDoc + documento.Servidor,
-            //            Tamanio = documento.Tamanio
-            //        };
-            //        listDocumentos.Add(doc);
-            //    }
-            //    _context.Documentos.AddRange(listDocumentos);
-            //    await _context.SaveChangesAsync();
-            //}
+            if (convenioVewModel.ListDocumentos.Count() > 0)
+            {
+                List<Documento> listDocumentos = new();
+                foreach (Documento documento in convenioVewModel.ListDocumentos)
+                {
+                    Documento doc = new()
+                    {
+                        ConvenioId = conv.Id,
+                        Nombre = documento.Nombre,
+                        Original = documento.Original,
+                        Servidor = documento.Servidor,
+                        Fecha = DateTime.Now,
+                        Url = pathDoc + documento.Servidor,
+                        Tamanio = documento.Tamanio
+                    };
+                    listDocumentos.Add(doc);
+                }
+                _context.Documentos.AddRange(listDocumentos);
+                await _context.SaveChangesAsync();
+            }
 
             try
             {
@@ -209,96 +209,93 @@ namespace BaratariaBackend.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                //if (!ActividadExists(actividadVewModel.Id))
-                //{
-                //    return NotFound();
-                //}
-                //else
-                //{
-                //    throw;
-                //}
+                if (!ConvenioExists(convenioVewModel.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
 
             return NoContent();
         }
 
-        // POST: api/Actividades
+        // POST: api/Convenios
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost, DisableRequestSizeLimit]
-        public async Task<ActionResult<Convenio>> PostConvenio([FromForm] string actividad, [FromForm] IFormFile imagen, [FromForm] string documentos)
+        public async Task<ActionResult<Convenio>> PostConvenio([FromForm] string convenio, [FromForm] IFormFile imagen)
         {
             try
             {
-                //Actividad act = null;
-                //var folderName = "imagenes";
-                //var actividadVewModel = JsonConvert.DeserializeObject<ActividadVm>(actividad);
+                Convenio conv = null;
+                var folderName = "imagenes";
+                var convenioVewModel = JsonConvert.DeserializeObject<ConvenioVm>(convenio);
 
-                //if (imagen.Length > 0)
-                //{
-                //    var fullPath = Path.Combine(pathImagen, actividadVewModel.ImagenServidor);
-                //    var dbPath = Path.Combine(folderName, actividadVewModel.ImagenServidor);
-                //    using (var stream = new FileStream(fullPath, FileMode.Create))
-                //    {
-                //        imagen.CopyTo(stream);
-                //    }
+                if (imagen.Length > 0)
+                {
+                    var fullPath = Path.Combine(pathImagen, convenioVewModel.ImagenServidor);
+                    var dbPath = Path.Combine(folderName, convenioVewModel.ImagenServidor);
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        imagen.CopyTo(stream);
+                    }
 
-                //    act = new Actividad
-                //    {
-                //        Titulo = actividadVewModel.Titulo,
-                //        FechaAlta = actividadVewModel.FechaAlta,
-                //        FechaInicio = actividadVewModel.FechaInicio,
-                //        FechaFin = actividadVewModel.FechaFin,
-                //        Mostrar = actividadVewModel.Mostrar,
-                //        Texto = actividadVewModel.Texto,
-                //        ImagenServidor = actividadVewModel.ImagenServidor,
-                //        ImagenPeso = imagen.Length,
-                //        ImagenOriginal = imagen.FileName
-                //    };
-                //}
+                    conv = new Convenio
+                    {
+                        Titulo = convenioVewModel.Titulo,
+                        FechaAlta = convenioVewModel.FechaAlta,
+                        Mostrar = convenioVewModel.Mostrar,
+                        Texto = convenioVewModel.Texto,
+                        ImagenServidor = convenioVewModel.ImagenServidor,
+                        ImagenPeso = imagen.Length,
+                        ImagenOriginal = imagen.FileName
+                    };
+                }
 
-                //_context.Actividades.Add(act);
-                //await _context.SaveChangesAsync();
+                _context.Convenios.Add(conv);
+                await _context.SaveChangesAsync();
 
-                //if (actividadVewModel.ListEnlaces.Count() > 0)
-                //{
-                //    List<DireccionWeb> listEnlaces = new();
-                //    foreach (DireccionWeb enlace in actividadVewModel.ListEnlaces)
-                //    {
-                //        DireccionWeb en = new()
-                //        {
-                //            ActividadId = act.Id,
-                //            Nombre = enlace.Nombre,
-                //            Url = enlace.Url
-                //        };
-                //        listEnlaces.Add(en);
-                //    }
-                //    _context.DireccionWebs.AddRange(listEnlaces);
-                //    await _context.SaveChangesAsync();
-                //}
+                if (convenioVewModel.ListEnlaces.Count() > 0)
+                {
+                    List<DireccionWeb> listEnlaces = new();
+                    foreach (DireccionWeb enlace in convenioVewModel.ListEnlaces)
+                    {
+                        DireccionWeb en = new()
+                        {
+                            ConvenioId = conv.Id,
+                            Nombre = enlace.Nombre,
+                            Url = enlace.Url
+                        };
+                        listEnlaces.Add(en);
+                    }
+                    _context.DireccionWebs.AddRange(listEnlaces);
+                    await _context.SaveChangesAsync();
+                }
 
-                //if (actividadVewModel.ListDocumentos.Count() > 0)
-                //{
-                //    List<Documento> listDocumentos = new();
-                //    foreach (Documento documento in actividadVewModel.ListDocumentos)
-                //    {
-                //        Documento doc = new()
-                //        {
-                //            ActividadId = act.Id,
-                //            Nombre = documento.Nombre,
-                //            Original = documento.Original,
-                //            Servidor = documento.Servidor,
-                //            Fecha = DateTime.Now,
-                //            Url = pathDoc + documento.Servidor,
-                //            Tamanio = documento.Tamanio
-                //        };
-                //        listDocumentos.Add(doc);
-                //    }
-                //    _context.Documentos.AddRange(listDocumentos);
-                //    await _context.SaveChangesAsync();
-                //}
+                if (convenioVewModel.ListDocumentos.Count() > 0)
+                {
+                    List<Documento> listDocumentos = new();
+                    foreach (Documento documento in convenioVewModel.ListDocumentos)
+                    {
+                        Documento doc = new()
+                        {
+                            ConvenioId = conv.Id,
+                            Nombre = documento.Nombre,
+                            Original = documento.Original,
+                            Servidor = documento.Servidor,
+                            Fecha = DateTime.Now,
+                            Url = pathDoc + documento.Servidor,
+                            Tamanio = documento.Tamanio
+                        };
+                        listDocumentos.Add(doc);
+                    }
+                    _context.Documentos.AddRange(listDocumentos);
+                    await _context.SaveChangesAsync();
+                }
 
-                //return CreatedAtAction("GetActividad", new { id = act.Id }, act);
-                return null;
+                return CreatedAtAction("GetConvenio", new { id = conv.Id }, conv);
             }
             catch (Exception ex)
             {

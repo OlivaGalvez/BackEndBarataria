@@ -121,7 +121,7 @@ namespace BaratariaBackend.Controllers
         // PUT: api/Actividades/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutActividad(int id, [FromForm] string actividad, [FromForm] IFormFile imagen, [FromForm] string documentos)
+        public async Task<IActionResult> PutActividad(int id, [FromForm] string actividad, [FromForm] IFormFile imagen)
         {
             var folderName = "imagenes";
             var actividadVewModel = JsonConvert.DeserializeObject<ActividadVm>(actividad);
@@ -226,7 +226,7 @@ namespace BaratariaBackend.Controllers
         // POST: api/Actividades
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost, DisableRequestSizeLimit]
-        public async Task<ActionResult<Actividad>> PostActividad([FromForm] string actividad, [FromForm] IFormFile imagen, [FromForm] string documentos)
+        public async Task<ActionResult<Actividad>> PostActividad([FromForm] string actividad, [FromForm] IFormFile imagen)
         {
             try
             {
