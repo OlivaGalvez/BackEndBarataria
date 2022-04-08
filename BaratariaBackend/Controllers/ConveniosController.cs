@@ -44,42 +44,40 @@ namespace BaratariaBackend.Controllers
         public async Task<ActionResult<IEnumerable<ConvenioVm>>> GetConvenios(bool portal = true)
         {
             List<ConvenioVm> listVm = new();
-            //List<Actividad> list = new();
+            List<Convenio> list = new();
 
-            //if (portal == true)
-            //{
-            //    list = await _context.Actividades.Where(i => i.Mostrar == true).OrderByDescending(i => i.FechaInicio).ToListAsync();
-            //}
-            //else
-            //{
-            //    list = await _context.Actividades.OrderByDescending(i => i.FechaAlta).ToListAsync();
-            //}
+            if (portal == true)
+            {
+                list = await _context.Convenios.Where(i => i.Mostrar == true).OrderByDescending(i => i.FechaAlta).ToListAsync();
+            }
+            else
+            {
+                list = await _context.Convenios.OrderByDescending(i => i.FechaAlta).ToListAsync();
+            }
 
-            //foreach (Actividad actividad in list)
-            //{
+            foreach (Convenio convenio in list)
+            {
 
-            //    byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + actividad.ImagenServidor);
-            //    string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+                byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + convenio.ImagenServidor);
+                string base64ImageRepresentation = Convert.ToBase64String(imageArray);
 
-            //    List<DireccionWeb> listEnlaces = _context.DireccionWebs.Where(i => i.ActividadId == actividad.Id).ToList();
-            //    List<Documento> listDocumentos = _context.Documentos.Where(i => i.ActividadId == actividad.Id).ToList();
+                List<DireccionWeb> listEnlaces = _context.DireccionWebs.Where(i => i.ConvenioId == convenio.Id).ToList();
+                List<Documento> listDocumentos = _context.Documentos.Where(i => i.ConvenioId == convenio.Id).ToList();
 
-            //    ActividadVm vm = new()
-            //    {
-            //        Id = actividad.Id,
-            //        FechaAlta = actividad.FechaAlta,
-            //        FechaInicio = actividad.FechaInicio,
-            //        FechaFin = actividad.FechaFin,
-            //        Titulo = actividad.Titulo,
-            //        Texto = actividad.Texto,
-            //        Mostrar = actividad.Mostrar,
-            //        ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation,
-            //        ListEnlaces = listEnlaces,
-            //        ListDocumentos = listDocumentos
-            //    };
+                ConvenioVm vm = new()
+                {
+                    Id = convenio.Id,
+                    FechaAlta = convenio.FechaAlta,
+                    Titulo = convenio.Titulo,
+                    Texto = convenio.Texto,
+                    Mostrar = convenio.Mostrar,
+                    ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation,
+                    ListEnlaces = listEnlaces,
+                    ListDocumentos = listDocumentos
+                };
 
-            //    listVm.Add(vm);
-            //}
+                listVm.Add(vm);
+            }
 
             return listVm;
         }
@@ -88,35 +86,32 @@ namespace BaratariaBackend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ConvenioVm>> GetConvenio(int id)
         {
-            //var actividad = await _context.Actividades.FindAsync(id);
+            var convenio = await _context.Convenios.FindAsync(id);
 
-            //if (actividad == null)
-            //{
-            //    return NotFound();
-            //}
+            if (convenio == null)
+            {
+                return NotFound();
+            }
 
-            //byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + actividad.ImagenServidor);
-            //string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+            byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + convenio.ImagenServidor);
+            string base64ImageRepresentation = Convert.ToBase64String(imageArray);
 
-            //List<DireccionWeb> listEnlaces = _context.DireccionWebs.Where(i => i.ActividadId == actividad.Id).ToList();
-            //List<Documento> listDocumentos = _context.Documentos.Where(i => i.ActividadId == actividad.Id).ToList();
+            List<DireccionWeb> listEnlaces = _context.DireccionWebs.Where(i => i.ConvenioId == convenio.Id).ToList();
+            List<Documento> listDocumentos = _context.Documentos.Where(i => i.ConvenioId == convenio.Id).ToList();
 
-            //ActividadVm vm = new()
-            //{
-            //    Id = actividad.Id,
-            //    FechaAlta = actividad.FechaAlta,
-            //    FechaInicio = actividad.FechaInicio,
-            //    FechaFin = actividad.FechaFin,
-            //    Titulo = actividad.Titulo,
-            //    Texto = actividad.Texto,
-            //    Mostrar = actividad.Mostrar,
-            //    ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation,
-            //    ListEnlaces = listEnlaces,
-            //    ListDocumentos = listDocumentos
-            //};
+            ConvenioVm vm = new()
+            {
+                Id = convenio.Id,
+                FechaAlta = convenio.FechaAlta,
+                Titulo = convenio.Titulo,
+                Texto = convenio.Texto,
+                Mostrar = convenio.Mostrar,
+                ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation,
+                ListEnlaces = listEnlaces,
+                ListDocumentos = listDocumentos
+            };
 
-            //return vm;
-            return null;
+            return vm;
         }
 
         // PUT: api/Convenios/5
@@ -309,24 +304,22 @@ namespace BaratariaBackend.Controllers
         {
             try
             {
-                //var actividad = await _context.Actividades.FindAsync(id);
-                //if (actividad == null)
-                //{
-                //    return NotFound();
-                //}
+                var convenio = await _context.Convenios.FindAsync(id);
+                if (convenio == null)
+                {
+                    return NotFound();
+                }
 
-                //List<Documento> listDocBorrado = _context.Documentos.Where(i => i.ActividadId == id).ToList();
-                //if (listDocBorrado != null) _context.RemoveRange(listDocBorrado);
+                List<Documento> listDocBorrado = _context.Documentos.Where(i => i.ActividadId == id).ToList();
+                if (listDocBorrado != null) _context.RemoveRange(listDocBorrado);
 
-                //List<DireccionWeb> listEnlaces = _context.DireccionWebs.Where(i => i.ActividadId == id).ToList();
-                //if (listEnlaces != null) _context.RemoveRange(listEnlaces);
+                List<DireccionWeb> listEnlaces = _context.DireccionWebs.Where(i => i.ActividadId == id).ToList();
+                if (listEnlaces != null) _context.RemoveRange(listEnlaces);
 
-                //await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
-
-
-                //_context.Actividades.Remove(actividad);
-                //await _context.SaveChangesAsync();
+                _context.Convenios.Remove(convenio);
+                await _context.SaveChangesAsync();
 
                 return NoContent();
             }
