@@ -40,14 +40,14 @@ namespace BaratariaBackend.Controllers
         {
             try
             {
-                var asociacion = await _context.Asociacions.OrderByDescending(i => i.Id).FirstAsync();
+                var asociacion = await _context.Asociacion.OrderByDescending(i => i.Id).FirstAsync();
 
                 if (asociacion == null)
                 {
                     return NotFound();
                 }
 
-                List<Documento> listDocumentos = _context.Documentos.Where(i => i.ActividadId == asociacion.Id).ToList();
+                List<Documento> listDocumentos = _context.Documentos.Where(i => i.AsociacionId != null).ToList();
 
                 AsociacionVm vm = new()
                 {
@@ -85,8 +85,11 @@ namespace BaratariaBackend.Controllers
                     Texto = asociacionVewModel.Texto
                 };
 
-                _context.Asociacions.Add(asoc);
+                _context.Asociacion.Add(asoc);
                 await _context.SaveChangesAsync();
+
+                List<Documento> listDocBorrado = _context.Documentos.Where(i => i.AsociacionId != null).ToList();
+                if (listDocBorrado != null) _context.RemoveRange(listDocBorrado);
 
                 if (asociacionVewModel.ListDocumentos.Count() > 0)
                 {
@@ -119,7 +122,7 @@ namespace BaratariaBackend.Controllers
 
         private bool AsociacionExists(int id)
         {
-            return _context.Asociacions.Any(e => e.Id == id);
+            return _context.Asociacion.Any(e => e.Id == id);
         }
     }
 }

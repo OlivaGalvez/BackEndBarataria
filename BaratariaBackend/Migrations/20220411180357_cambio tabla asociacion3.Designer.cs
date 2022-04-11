@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BaratariaBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220411165550_titulo asociacion")]
-    partial class tituloasociacion
+    [Migration("20220411180357_cambio tabla asociacion3")]
+    partial class cambiotablaasociacion3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -78,7 +78,7 @@ namespace BaratariaBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Asociacions");
+                    b.ToTable("Asociacion");
                 });
 
             modelBuilder.Entity("BaratariaBackend.Models.Entities.Convenio", b =>

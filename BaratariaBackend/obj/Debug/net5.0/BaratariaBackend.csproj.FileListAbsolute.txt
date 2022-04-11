@@ -2980,3 +2980,4 @@ C:\Users\Oliva\Documents\Barataria\BackEndBarataria\BaratariaBackend\obj\Debug\n
 C:\Users\Oliva\Documents\Barataria\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\BaratariaBackend.pdb
 C:\Users\Oliva\Documents\Barataria\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\BaratariaBackend.genruntimeconfig.cache
 C:\Users\U179240\Documents\Barataria\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\BaratariaBackend.csproj.AssemblyReference.cache
+C:\Users\Oliva\Documents\Barataria\BackEndBarataria\BaratariaBackend\obj\Debug\net5.0\BaratariaBackend.csproj.AssemblyReference.cache

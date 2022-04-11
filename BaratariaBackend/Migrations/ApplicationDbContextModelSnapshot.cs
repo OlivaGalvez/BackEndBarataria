@@ -76,7 +76,7 @@ namespace BaratariaBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Asociacions");
+                    b.ToTable("Asociacion");
                 });
 
             modelBuilder.Entity("BaratariaBackend.Models.Entities.Convenio", b =>
