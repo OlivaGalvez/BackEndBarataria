@@ -44,19 +44,66 @@ namespace BaratariaBackend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ActividadVm>>> GetActividades(bool portal = true)
         {
-            List<ActividadVm> listVm = new();
-            List<Actividad> list = new();
-
-            if (portal == true)
+            try 
             {
-                list = await _context.Actividades.Where(i => i.Mostrar == true).OrderByDescending(i=>i.FechaInicio).ToListAsync();
-            }
-            else {
-                list = await _context.Actividades.OrderByDescending(i => i.FechaAlta).ToListAsync();
-            }
+                List<ActividadVm> listVm = new();
+                List<Actividad> list = new();
 
-            foreach (Actividad actividad in list)
+                if (portal == true)
+                {
+                    list = await _context.Actividades.Where(i => i.Mostrar == true).OrderByDescending(i => i.FechaInicio).ToListAsync();
+                }
+                else
+                {
+                    list = await _context.Actividades.OrderByDescending(i => i.FechaAlta).ToListAsync();
+                }
+
+                foreach (Actividad actividad in list)
+                {
+
+                    byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + actividad.ImagenServidor);
+                    string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+
+                    List<DireccionWeb> listEnlaces = _context.DireccionWebs.Where(i => i.ActividadId == actividad.Id).ToList();
+                    List<Documento> listDocumentos = _context.Documentos.Where(i => i.ActividadId == actividad.Id).ToList();
+
+                    ActividadVm vm = new()
+                    {
+                        Id = actividad.Id,
+                        FechaAlta = actividad.FechaAlta,
+                        FechaInicio = actividad.FechaInicio,
+                        FechaFin = actividad.FechaFin,
+                        Titulo = actividad.Titulo,
+                        Texto = actividad.Texto,
+                        Mostrar = actividad.Mostrar,
+                        ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation,
+                        ListEnlaces = listEnlaces,
+                        ListDocumentos = listDocumentos
+                    };
+
+                    listVm.Add(vm);
+                }
+                return listVm;
+
+            } 
+            catch (Exception ex)
             {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
+        }
+
+        // GET: api/Actividades/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ActividadVm>> GetActividad(int id)
+        {
+            try 
+            {
+                var actividad = await _context.Actividades.FindAsync(id);
+
+                if (actividad == null)
+                {
+                    return NotFound();
+                }
 
                 byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + actividad.ImagenServidor);
                 string base64ImageRepresentation = Convert.ToBase64String(imageArray);
@@ -78,44 +125,13 @@ namespace BaratariaBackend.Controllers
                     ListDocumentos = listDocumentos
                 };
 
-                listVm.Add(vm);
-            }
-
-            return listVm;
-        }
-
-        // GET: api/Actividades/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ActividadVm>> GetActividad(int id)
-        {
-            var actividad = await _context.Actividades.FindAsync(id);
-
-            if (actividad == null)
+                return vm;
+            } 
+            catch (Exception ex)
             {
-                return NotFound();
+                return StatusCode(500, $"Internal server error: {ex}");
             }
-
-            byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + actividad.ImagenServidor);
-            string base64ImageRepresentation = Convert.ToBase64String(imageArray);
-
-            List<DireccionWeb> listEnlaces = _context.DireccionWebs.Where(i => i.ActividadId == actividad.Id).ToList();
-            List<Documento> listDocumentos = _context.Documentos.Where(i => i.ActividadId == actividad.Id).ToList();
-
-            ActividadVm vm = new()
-            {
-                Id = actividad.Id,
-                FechaAlta = actividad.FechaAlta,
-                FechaInicio = actividad.FechaInicio,
-                FechaFin = actividad.FechaFin,
-                Titulo = actividad.Titulo,
-                Texto = actividad.Texto,
-                Mostrar = actividad.Mostrar,
-                ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation,
-                ListEnlaces = listEnlaces,
-                ListDocumentos = listDocumentos
-            };
-
-            return vm;
+            
         }
 
         // PUT: api/Actividades/5
