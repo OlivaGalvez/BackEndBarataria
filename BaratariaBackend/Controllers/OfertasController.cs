@@ -45,47 +45,41 @@ namespace BaratariaBackend.Controllers
         {
             try
             {
-                //List<ActividadVm> listVm = new();
-                //List<Actividad> list = new();
+                List<OfertaVm> listVm = new();
+                List<Oferta> list = new();
 
-                //if (portal == true)
-                //{
-                //    list = await _context.Actividades.Where(i => i.Mostrar == true).OrderByDescending(i => i.FechaInicio).ToListAsync();
-                //}
-                //else
-                //{
-                //    list = await _context.Actividades.OrderByDescending(i => i.FechaAlta).ToListAsync();
-                //}
+                if (portal == true)
+                {
+                    list = await _context.Ofertas.Where(i => i.Mostrar == true).OrderByDescending(i => i.FechaInicio).ToListAsync();
+                }
+                else
+                {
+                    list = await _context.Ofertas.OrderByDescending(i => i.FechaAlta).ToListAsync();
+                }
 
-                //foreach (Actividad actividad in list)
-                //{
+                foreach (Oferta oferta in list)
+                {
 
-                //    byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + actividad.ImagenServidor);
-                //    string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+                    byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + oferta.ImagenServidor);
+                    string base64ImageRepresentation = Convert.ToBase64String(imageArray);
 
-                //    List<DireccionWeb> listEnlaces = _context.DireccionWebs.Where(i => i.ActividadId == actividad.Id).ToList();
-                //    List<Documento> listDocumentos = _context.Documentos.Where(i => i.ActividadId == actividad.Id).ToList();
+                    List<Documento> listDocumentos = _context.Documentos.Where(i => i.OfertaId == oferta.Id).ToList();
 
-                //    ActividadVm vm = new()
-                //    {
-                //        Id = actividad.Id,
-                //        FechaAlta = actividad.FechaAlta,
-                //        FechaInicio = actividad.FechaInicio,
-                //        FechaFin = actividad.FechaFin,
-                //        Titulo = actividad.Titulo,
-                //        Texto = actividad.Texto,
-                //        Mostrar = actividad.Mostrar,
-                //        ImporteSocio = actividad.ImporteSocio != null ? Convert.ToDouble(actividad.ImporteSocio) : 0,
-                //        ImporteNoSocio = actividad.ImporteNoSocio != null ? Convert.ToDouble(actividad.ImporteNoSocio) : 0,
-                //        ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation,
-                //        ListEnlaces = listEnlaces,
-                //        ListDocumentos = listDocumentos
-                //    };
+                    OfertaVm vm = new()
+                    {
+                        Id = oferta.Id,
+                        FechaAlta = oferta.FechaAlta,
+                        FechaInicio = oferta.FechaInicio,
+                        FechaFin = oferta.FechaFin,
+                        Titulo = oferta.Titulo,
+                        Mostrar = oferta.Mostrar,
+                        ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation,
+                        ListDocumentos = listDocumentos
+                    };
 
-                //    listVm.Add(vm);
-                //}
-                //return listVm;
-                return null;
+                    listVm.Add(vm);
+                }
+                return listVm;
             }
             catch (Exception ex)
             {
@@ -99,37 +93,31 @@ namespace BaratariaBackend.Controllers
         {
             try
             {
-                //    var actividad = await _context.Actividades.FindAsync(id);
+                var oferta = await _context.Ofertas.FindAsync(id);
 
-                //    if (actividad == null)
-                //    {
-                //        return NotFound();
-                //    }
+                if (oferta == null)
+                {
+                    return NotFound();
+                }
 
-                //    byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + actividad.ImagenServidor);
-                //    string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+                byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + oferta.ImagenServidor);
+                string base64ImageRepresentation = Convert.ToBase64String(imageArray);
 
-                //    List<DireccionWeb> listEnlaces = _context.DireccionWebs.Where(i => i.ActividadId == actividad.Id).ToList();
-                //    List<Documento> listDocumentos = _context.Documentos.Where(i => i.ActividadId == actividad.Id).ToList();
+                List<Documento> listDocumentos = _context.Documentos.Where(i => i.OfertaId == oferta.Id).ToList();
 
-                //    ActividadVm vm = new()
-                //    {
-                //        Id = actividad.Id,
-                //        FechaAlta = actividad.FechaAlta,
-                //        FechaInicio = actividad.FechaInicio,
-                //        FechaFin = actividad.FechaFin,
-                //        Titulo = actividad.Titulo,
-                //        Texto = actividad.Texto,
-                //        Mostrar = actividad.Mostrar,
-                //        ImporteSocio = actividad.ImporteSocio != null ? Convert.ToDouble(actividad.ImporteSocio) : 0,
-                //        ImporteNoSocio = actividad.ImporteNoSocio != null ? Convert.ToDouble(actividad.ImporteNoSocio) : 0,
-                //        ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation,
-                //        ListEnlaces = listEnlaces,
-                //        ListDocumentos = listDocumentos
-                //    };
+                OfertaVm vm = new()
+                {
+                    Id = oferta.Id,
+                    FechaAlta = oferta.FechaAlta,
+                    FechaInicio = oferta.FechaInicio,
+                    FechaFin = oferta.FechaFin,
+                    Titulo = oferta.Titulo,
+                    Mostrar = oferta.Mostrar,
+                    ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation,
+                    ListDocumentos = listDocumentos
+                };
 
-                //    return vm;
-                return null;
+                return vm;
             }
 
             catch (Exception ex)
@@ -144,104 +132,83 @@ namespace BaratariaBackend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutOfertas(int id, [FromForm] string oferta, [FromForm] IFormFile imagen)
         {
-            //var folderName = "imagenes";
-            //var actividadVewModel = JsonConvert.DeserializeObject<ActividadVm>(actividad);
-            //if (actividadVewModel.Id != id)
-            //{
-            //    return BadRequest();
-            //}
+            var folderName = "imagenes";
+            var ofertaVewModel = JsonConvert.DeserializeObject<OfertaVm>(oferta);
+            if (ofertaVewModel.Id != id)
+            {
+                return BadRequest();
+            }
 
-            //Actividad act = _context.Actividades.Find(id);
-            //if (act == null)
-            //{
-            //    return BadRequest();
-            //}
+            Oferta ofer = _context.Ofertas.Find(id);
+            if (ofer == null)
+            {
+                return BadRequest();
+            }
 
-            //if (imagen != null && imagen.Length > 0)
-            //{
-            //    var fullPath = Path.Combine(pathImagen, actividadVewModel.ImagenServidor);
-            //    var dbPath = Path.Combine(folderName, actividadVewModel.ImagenServidor);
-            //    using (var stream = new FileStream(fullPath, FileMode.Create))
-            //    {
-            //        imagen.CopyTo(stream);
-            //    }
-            //}
-            //act.Titulo = actividadVewModel.Titulo;
-            //act.FechaAlta = actividadVewModel.FechaAlta;
-            //act.FechaInicio = actividadVewModel.FechaInicio;
-            //act.FechaFin = actividadVewModel.FechaFin;
-            //act.Mostrar = actividadVewModel.Mostrar;
-            //act.Texto = actividadVewModel.Texto;
-            //act.ImporteSocio = actividadVewModel.ImporteSocio != null ? Convert.ToDecimal(actividadVewModel.ImporteSocio) : 0;
-            //act.ImporteNoSocio = actividadVewModel.ImporteNoSocio != null ? Convert.ToDecimal(actividadVewModel.ImporteNoSocio) : 0;
-            //if (imagen != null)
-            //{
-            //    act.ImagenServidor = actividadVewModel.ImagenServidor;
-            //    act.ImagenPeso = imagen.Length;
-            //    act.ImagenOriginal = imagen.FileName;
-            //}
+            if (imagen != null && imagen.Length > 0)
+            {
+                var fullPath = Path.Combine(pathImagen, ofertaVewModel.ImagenServidor);
+                var dbPath = Path.Combine(folderName, ofertaVewModel.ImagenServidor);
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    imagen.CopyTo(stream);
+                }
+            }
+            ofer.Titulo = ofertaVewModel.Titulo;
+            ofer.FechaAlta = ofertaVewModel.FechaAlta;
+            ofer.FechaInicio = ofertaVewModel.FechaInicio;
+            ofer.FechaFin = ofertaVewModel.FechaFin;
+            ofer.Mostrar = ofertaVewModel.Mostrar;
+           
+            if (imagen != null)
+            {
+                ofer.ImagenServidor = ofertaVewModel.ImagenServidor;
+                ofer.ImagenPeso = imagen.Length;
+                ofer.ImagenOriginal = imagen.FileName;
+            }
+            _context.Entry(ofer).State = EntityState.Modified;
+            
+            List<Documento> listDocBorrado = _context.Documentos.Where(i => i.OfertaId == id).ToList();
+            if (listDocBorrado != null) _context.RemoveRange(listDocBorrado);
+            await _context.SaveChangesAsync();
+          
 
+            if (ofertaVewModel.ListDocumentos.Count() > 0)
+            {
+                List<Documento> listDocumentos = new();
+                foreach (Documento documento in ofertaVewModel.ListDocumentos)
+                {
+                    Documento doc = new()
+                    {
+                        OfertaId = ofer.Id,
+                        Nombre = documento.Nombre,
+                        Original = documento.Original,
+                        Servidor = documento.Servidor,
+                        Fecha = DateTime.Now,
+                        Url = pathDoc + documento.Servidor,
+                        Tamanio = documento.Tamanio
+                    };
+                    listDocumentos.Add(doc);
+                }
+                _context.Documentos.AddRange(listDocumentos);
+                await _context.SaveChangesAsync();
+            }
 
-            //_context.Entry(act).State = EntityState.Modified;
-
-            //List<DireccionWeb> listActBorrado = _context.DireccionWebs.Where(i => i.ActividadId == id).ToList();
-            //if (listActBorrado != null) _context.RemoveRange(listActBorrado);
-            //List<Documento> listDocBorrado = _context.Documentos.Where(i => i.ActividadId == id).ToList();
-            //if (listDocBorrado != null) _context.RemoveRange(listDocBorrado);
-            //await _context.SaveChangesAsync();
-
-            //if (actividadVewModel.ListEnlaces.Count() > 0)
-            //{
-            //    List<DireccionWeb> listEnlaces = new();
-            //    foreach (DireccionWeb enlace in actividadVewModel.ListEnlaces)
-            //    {
-            //        DireccionWeb en = new()
-            //        {
-            //            ActividadId = act.Id,
-            //            Nombre = enlace.Nombre,
-            //            Url = enlace.Url
-            //        };
-            //        listEnlaces.Add(en);
-            //    }
-            //    _context.DireccionWebs.AddRange(listEnlaces);
-            //}
-
-            //if (actividadVewModel.ListDocumentos.Count() > 0)
-            //{
-            //    List<Documento> listDocumentos = new();
-            //    foreach (Documento documento in actividadVewModel.ListDocumentos)
-            //    {
-            //        Documento doc = new()
-            //        {
-            //            ActividadId = act.Id,
-            //            Nombre = documento.Nombre,
-            //            Original = documento.Original,
-            //            Servidor = documento.Servidor,
-            //            Fecha = DateTime.Now,
-            //            Url = pathDoc + documento.Servidor,
-            //            Tamanio = documento.Tamanio
-            //        };
-            //        listDocumentos.Add(doc);
-            //    }
-            //    _context.Documentos.AddRange(listDocumentos);
-            //    await _context.SaveChangesAsync();
-            //}
-
-            //try
-            //{
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateConcurrencyException)
-            //{
-            //    if (!ActividadExists(actividadVewModel.Id))
-            //    {
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!OfertaExists(ofertaVewModel.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             return NoContent();
         }
@@ -253,78 +220,58 @@ namespace BaratariaBackend.Controllers
         {
             try
             {
-                //Actividad act = null;
-                //var folderName = "imagenes";
-                //var actividadVewModel = JsonConvert.DeserializeObject<ActividadVm>(actividad);
+                Oferta ofer = null;
+                var folderName = "imagenes";
+                var ofertaVewModel = JsonConvert.DeserializeObject<OfertaVm>(oferta);
 
-                //if (imagen.Length > 0)
-                //{
-                //    var fullPath = Path.Combine(pathImagen, actividadVewModel.ImagenServidor);
-                //    var dbPath = Path.Combine(folderName, actividadVewModel.ImagenServidor);
-                //    using (var stream = new FileStream(fullPath, FileMode.Create))
-                //    {
-                //        imagen.CopyTo(stream);
-                //    }
+                if (imagen.Length > 0)
+                {
+                    var fullPath = Path.Combine(pathImagen, ofertaVewModel.ImagenServidor);
+                    var dbPath = Path.Combine(folderName, ofertaVewModel.ImagenServidor);
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        imagen.CopyTo(stream);
+                    }
 
-                //    act = new Actividad
-                //    {
-                //        Titulo = actividadVewModel.Titulo,
-                //        FechaAlta = actividadVewModel.FechaAlta,
-                //        FechaInicio = actividadVewModel.FechaInicio,
-                //        FechaFin = actividadVewModel.FechaFin,
-                //        Mostrar = actividadVewModel.Mostrar,
-                //        Texto = actividadVewModel.Texto,
-                //        ImporteSocio = actividadVewModel.ImporteSocio != null ? Convert.ToDecimal(actividadVewModel.ImporteSocio) : 0,
-                //        ImporteNoSocio = actividadVewModel.ImporteNoSocio != null ? Convert.ToDecimal(actividadVewModel.ImporteNoSocio) : 0,
-                //        ImagenServidor = actividadVewModel.ImagenServidor,
-                //        ImagenPeso = imagen.Length,
-                //        ImagenOriginal = imagen.FileName
-                //    };
-                //}
+                    ofer = new Oferta
+                    {
+                        Titulo = ofertaVewModel.Titulo,
+                        FechaAlta = ofertaVewModel.FechaAlta,
+                        FechaInicio = ofertaVewModel.FechaInicio,
+                        FechaFin = ofertaVewModel.FechaFin,
+                        Mostrar = ofertaVewModel.Mostrar,
+                        ImagenServidor = ofertaVewModel.ImagenServidor,
+                        ImagenPeso = imagen.Length,
+                        ImagenOriginal = imagen.FileName
+                    };
+                }
 
-                //_context.Actividades.Add(act);
-                //await _context.SaveChangesAsync();
+                _context.Ofertas.Add(ofer);
+                await _context.SaveChangesAsync();
+               
 
-                //if (actividadVewModel.ListEnlaces.Count() > 0)
-                //{
-                //    List<DireccionWeb> listEnlaces = new();
-                //    foreach (DireccionWeb enlace in actividadVewModel.ListEnlaces)
-                //    {
-                //        DireccionWeb en = new()
-                //        {
-                //            ActividadId = act.Id,
-                //            Nombre = enlace.Nombre,
-                //            Url = enlace.Url
-                //        };
-                //        listEnlaces.Add(en);
-                //    }
-                //    _context.DireccionWebs.AddRange(listEnlaces);
-                //    await _context.SaveChangesAsync();
-                //}
+                if (ofertaVewModel.ListDocumentos.Count() > 0)
+                {
+                    List<Documento> listDocumentos = new();
+                    foreach (Documento documento in ofertaVewModel.ListDocumentos)
+                    {
+                        Documento doc = new()
+                        {
+                            OfertaId = ofer.Id,
+                            Nombre = documento.Nombre,
+                            Original = documento.Original,
+                            Servidor = documento.Servidor,
+                            Fecha = DateTime.Now,
+                            Url = pathDoc + documento.Servidor,
+                            Tamanio = documento.Tamanio
+                        };
+                        listDocumentos.Add(doc);
+                    }
+                    _context.Documentos.AddRange(listDocumentos);
+                    await _context.SaveChangesAsync();
+                }
 
-                //if (actividadVewModel.ListDocumentos.Count() > 0)
-                //{
-                //    List<Documento> listDocumentos = new();
-                //    foreach (Documento documento in actividadVewModel.ListDocumentos)
-                //    {
-                //        Documento doc = new()
-                //        {
-                //            ActividadId = act.Id,
-                //            Nombre = documento.Nombre,
-                //            Original = documento.Original,
-                //            Servidor = documento.Servidor,
-                //            Fecha = DateTime.Now,
-                //            Url = pathDoc + documento.Servidor,
-                //            Tamanio = documento.Tamanio
-                //        };
-                //        listDocumentos.Add(doc);
-                //    }
-                //    _context.Documentos.AddRange(listDocumentos);
-                //    await _context.SaveChangesAsync();
-                //}
-
-                //return CreatedAtAction("GetActividad", new { id = act.Id }, act);
-                return null;
+                return CreatedAtAction("GetOfertas", new { id = ofer.Id }, ofer);
             }
             catch (Exception ex)
             {
@@ -338,24 +285,18 @@ namespace BaratariaBackend.Controllers
         {
             try
             {
-                //var actividad = await _context.Actividades.FindAsync(id);
-                //if (actividad == null)
-                //{
-                //    return NotFound();
-                //}
+                var oferta = await _context.Ofertas.FindAsync(id);
+                if (oferta == null)
+                {
+                    return NotFound();
+                }
 
-                //List<Documento> listDocBorrado = _context.Documentos.Where(i => i.ActividadId == id).ToList();
-                //if (listDocBorrado != null) _context.RemoveRange(listDocBorrado);
+                List<Documento> listDocBorrado = _context.Documentos.Where(i => i.OfertaId == id).ToList();
+                if (listDocBorrado != null) _context.RemoveRange(listDocBorrado);
+                await _context.SaveChangesAsync();
 
-                //List<DireccionWeb> listEnlaces = _context.DireccionWebs.Where(i => i.ActividadId == id).ToList();
-                //if (listEnlaces != null) _context.RemoveRange(listEnlaces);
-
-                //await _context.SaveChangesAsync();
-
-
-
-                //_context.Actividades.Remove(actividad);
-                //await _context.SaveChangesAsync();
+                _context.Ofertas.Remove(oferta);
+                await _context.SaveChangesAsync();
 
                 return NoContent();
             }
