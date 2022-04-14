@@ -76,6 +76,8 @@ namespace BaratariaBackend.Controllers
                         Titulo = actividad.Titulo,
                         Texto = actividad.Texto,
                         Mostrar = actividad.Mostrar,
+                        ImporteSocio = actividad.ImporteSocio != null ? Convert.ToDouble(actividad.ImporteSocio) : 0,
+                        ImporteNoSocio = actividad.ImporteNoSocio != null ? Convert.ToDouble(actividad.ImporteNoSocio) : 0,
                         ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation,
                         ListEnlaces = listEnlaces,
                         ListDocumentos = listDocumentos
@@ -120,6 +122,8 @@ namespace BaratariaBackend.Controllers
                     Titulo = actividad.Titulo,
                     Texto = actividad.Texto,
                     Mostrar = actividad.Mostrar,
+                    ImporteSocio = actividad.ImporteSocio != null ? Convert.ToDouble(actividad.ImporteSocio) : 0,
+                    ImporteNoSocio = actividad.ImporteNoSocio != null ? Convert.ToDouble(actividad.ImporteNoSocio) : 0,
                     ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation,
                     ListEnlaces = listEnlaces,
                     ListDocumentos = listDocumentos
@@ -167,6 +171,8 @@ namespace BaratariaBackend.Controllers
             act.FechaFin = actividadVewModel.FechaFin;
             act.Mostrar = actividadVewModel.Mostrar;
             act.Texto = actividadVewModel.Texto;
+            act.ImporteSocio = actividadVewModel.ImporteSocio != null ? Convert.ToDecimal(actividadVewModel.ImporteSocio) : 0;
+            act.ImporteNoSocio = actividadVewModel.ImporteNoSocio != null ? Convert.ToDecimal(actividadVewModel.ImporteNoSocio) : 0;
             if (imagen != null)
             {
                 act.ImagenServidor = actividadVewModel.ImagenServidor;
@@ -267,6 +273,8 @@ namespace BaratariaBackend.Controllers
                         FechaFin = actividadVewModel.FechaFin,
                         Mostrar = actividadVewModel.Mostrar,
                         Texto = actividadVewModel.Texto,
+                        ImporteSocio = actividadVewModel.ImporteSocio != null ? Convert.ToDecimal(actividadVewModel.ImporteSocio) : 0,
+                        ImporteNoSocio = actividadVewModel.ImporteNoSocio != null ? Convert.ToDecimal(actividadVewModel.ImporteNoSocio) : 0,
                         ImagenServidor = actividadVewModel.ImagenServidor,
                         ImagenPeso = imagen.Length,
                         ImagenOriginal = imagen.FileName

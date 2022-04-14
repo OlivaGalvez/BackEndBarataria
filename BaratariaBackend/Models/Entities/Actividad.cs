@@ -19,6 +19,10 @@ namespace BaratariaBackend.Models.Entities
         public DateTime? FechaInicio { get; set; }
         [Column(TypeName = "timestamp")]
         public DateTime? FechaFin { get; set; }
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal? ImporteSocio { get; set; }
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal? ImporteNoSocio { get; set; }
         [Column(TypeName = "boolean")]
         public bool? Mostrar { get; set; }
         [Column(TypeName = "varchar")]

@@ -13,6 +13,8 @@ namespace BaratariaBackend.ViewModels
         public DateTime? FechaAlta { get; set; }
         public DateTime? FechaInicio { get; set; }
         public DateTime? FechaFin { get; set; }
+        public double? ImporteSocio { get; set; }
+        public double? ImporteNoSocio { get; set; }
         public bool? Mostrar { get; set; }
         public string Texto { get; set; }
         public string ImagenServidor { get; set; }

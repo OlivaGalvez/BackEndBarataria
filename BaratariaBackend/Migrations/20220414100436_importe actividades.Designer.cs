@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BaratariaBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220411180357_cambio tabla asociacion3")]
-    partial class cambiotablaasociacion3
+    [Migration("20220414100436_importe actividades")]
+    partial class importeactividades
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,6 +46,12 @@ namespace BaratariaBackend.Migrations
                     b.Property<string>("ImagenServidor")
                         .HasColumnType("varchar(200)");
 
+                    b.Property<decimal>("ImporteNoSocio")
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<decimal>("ImporteSocio")
+                        .HasColumnType("numeric(18,2)");
+
                     b.Property<bool?>("Mostrar")
                         .HasColumnType("boolean");
 
@@ -58,27 +64,6 @@ namespace BaratariaBackend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Actividades");
-                });
-
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.Asociacion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTime?>("FechaAlta")
-                        .HasColumnType("timestamp");
-
-                    b.Property<string>("Texto")
-                        .HasColumnType("varchar");
-
-                    b.Property<string>("Titulo")
-                        .HasColumnType("varchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Asociacion");
                 });
 
             modelBuilder.Entity("BaratariaBackend.Models.Entities.Convenio", b =>
@@ -152,9 +137,6 @@ namespace BaratariaBackend.Migrations
                     b.Property<int?>("ActividadId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("AsociacionId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("ConvenioId")
                         .HasColumnType("integer");
 
@@ -182,8 +164,6 @@ namespace BaratariaBackend.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ActividadId");
-
-                    b.HasIndex("AsociacionId");
 
                     b.HasIndex("ConvenioId");
 
@@ -240,10 +220,6 @@ namespace BaratariaBackend.Migrations
                         .WithMany("Documentos")
                         .HasForeignKey("ActividadId");
 
-                    b.HasOne("BaratariaBackend.Models.Entities.Asociacion", null)
-                        .WithMany("Documentos")
-                        .HasForeignKey("AsociacionId");
-
                     b.HasOne("BaratariaBackend.Models.Entities.Convenio", null)
                         .WithMany("Documentos")
                         .HasForeignKey("ConvenioId");
@@ -253,11 +229,6 @@ namespace BaratariaBackend.Migrations
                 {
                     b.Navigation("DireccionWebs");
 
-                    b.Navigation("Documentos");
-                });
-
-            modelBuilder.Entity("BaratariaBackend.Models.Entities.Asociacion", b =>
-                {
                     b.Navigation("Documentos");
                 });
 

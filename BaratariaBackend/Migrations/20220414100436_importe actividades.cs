@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace BaratariaBackend.Migrations
 {
-    public partial class cambiotablaasociacion3 : Migration
+    public partial class importeactividades : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -18,6 +18,8 @@ namespace BaratariaBackend.Migrations
                     FechaAlta = table.Column<DateTime>(type: "timestamp", nullable: true),
                     FechaInicio = table.Column<DateTime>(type: "timestamp", nullable: true),
                     FechaFin = table.Column<DateTime>(type: "timestamp", nullable: true),
+                    ImporteSocio = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    ImporteNoSocio = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
                     Mostrar = table.Column<bool>(type: "boolean", nullable: true),
                     Texto = table.Column<string>(type: "varchar", nullable: true),
                     ImagenOriginal = table.Column<string>(type: "varchar(200)", nullable: true),
@@ -27,21 +29,6 @@ namespace BaratariaBackend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Actividades", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Asociacion",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Titulo = table.Column<string>(type: "varchar(200)", nullable: true),
-                    FechaAlta = table.Column<DateTime>(type: "timestamp", nullable: true),
-                    Texto = table.Column<string>(type: "varchar", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Asociacion", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -118,7 +105,6 @@ namespace BaratariaBackend.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ActividadId = table.Column<int>(type: "integer", nullable: true),
                     ConvenioId = table.Column<int>(type: "integer", nullable: true),
-                    AsociacionId = table.Column<int>(type: "integer", nullable: true),
                     Nombre = table.Column<string>(type: "varchar(200)", nullable: true),
                     Original = table.Column<string>(type: "varchar(200)", nullable: true),
                     Servidor = table.Column<string>(type: "varchar(500)", nullable: true),
@@ -134,12 +120,6 @@ namespace BaratariaBackend.Migrations
                         name: "FK_Documentos_Actividades_ActividadId",
                         column: x => x.ActividadId,
                         principalTable: "Actividades",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Documentos_Asociacion_AsociacionId",
-                        column: x => x.AsociacionId,
-                        principalTable: "Asociacion",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -166,11 +146,6 @@ namespace BaratariaBackend.Migrations
                 column: "ActividadId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Documentos_AsociacionId",
-                table: "Documentos",
-                column: "AsociacionId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Documentos_ConvenioId",
                 table: "Documentos",
                 column: "ConvenioId");
@@ -189,9 +164,6 @@ namespace BaratariaBackend.Migrations
 
             migrationBuilder.DropTable(
                 name: "Actividades");
-
-            migrationBuilder.DropTable(
-                name: "Asociacion");
 
             migrationBuilder.DropTable(
                 name: "Convenios");
