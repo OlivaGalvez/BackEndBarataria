@@ -13,6 +13,7 @@ namespace BaratariaBackend.Models.Entities
         public int Id { get; set; }
         public int? ActividadId { get; set; }
         public int? ConvenioId { get; set; }
+        public int? OfertaId { get; set; }
         [Column(TypeName = "varchar(200)")]
         public string Nombre { get; set; }
         [Column(TypeName = "varchar(200)")]

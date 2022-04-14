@@ -19,6 +19,7 @@ namespace BaratariaBackend.Models.Context
         public DbSet<Documento> Documentos { get; set; }
         public DbSet<Enlace> Enlaces { get; set; }
         public DbSet<Convenio> Convenios { get; set; }
+        public DbSet<Oferta> Ofertas { get; set; }
 
         // we override the OnModelCreating method here.
         protected override void OnModelCreating(ModelBuilder modelBuilder)
