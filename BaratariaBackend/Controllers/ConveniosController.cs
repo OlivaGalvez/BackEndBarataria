@@ -82,42 +82,6 @@ namespace BaratariaBackend.Controllers
             return listVm;
         }
 
-        // GET: api/ConveniosInicio
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ConvenioVm>>> GetConveniosInicio()
-        {
-            List<ConvenioVm> listVm = new();
-            List<Convenio> list = new();
-
-            list = await _context.Convenios.Where(i => i.Mostrar == true).OrderByDescending(i => i.FechaAlta).ToListAsync();
-            
-            foreach (Convenio convenio in list)
-            {
-
-                byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + convenio.ImagenServidor);
-                string base64ImageRepresentation = Convert.ToBase64String(imageArray);
-
-                List<DireccionWeb> listEnlaces = _context.DireccionWebs.Where(i => i.ConvenioId == convenio.Id).ToList();
-                List<Documento> listDocumentos = _context.Documentos.Where(i => i.ConvenioId == convenio.Id).ToList();
-
-                ConvenioVm vm = new()
-                {
-                    Id = convenio.Id,
-                    FechaAlta = convenio.FechaAlta,
-                    Titulo = convenio.Titulo,
-                    Texto = convenio.Texto,
-                    Mostrar = convenio.Mostrar,
-                    ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation,
-                    ListEnlaces = listEnlaces,
-                    ListDocumentos = listDocumentos
-                };
-
-                listVm.Add(vm);
-            }
-
-            return listVm;
-        }
-
         // GET: api/Convenios/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ConvenioVm>> GetConvenio(int id)

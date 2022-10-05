@@ -51,7 +51,7 @@ namespace BaratariaBackend.Controllers
 
                 if (portal == true)
                 {
-                    list = await _context.Actividades.Where(i => i.Mostrar == true).OrderByDescending(i => i.FechaInicio).ToListAsync();
+                    list = await _context.Actividades.Where(i => i.Mostrar == true).OrderByDescending(i => i.FechaAlta).ToListAsync();
                 }
                 else
                 {
@@ -88,53 +88,6 @@ namespace BaratariaBackend.Controllers
                 return listVm;
 
             } 
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex}");
-            }
-        }
-
-        // GET: api/ActividadesInicio
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ActividadVm>>> GetActividadesInicio()
-        {
-            try
-            {
-                List<ActividadVm> listVm = new();
-                List<Actividad> list = new();
-
-                list = await _context.Actividades.Where(i => i.Mostrar == true).OrderByDescending(i => i.FechaAlta).ToListAsync();
-
-                foreach (Actividad actividad in list)
-                {
-
-                    byte[] imageArray = System.IO.File.ReadAllBytes(pathImagen + actividad.ImagenServidor);
-                    string base64ImageRepresentation = Convert.ToBase64String(imageArray);
-
-                    List<DireccionWeb> listEnlaces = _context.DireccionWebs.Where(i => i.ActividadId == actividad.Id).ToList();
-                    List<Documento> listDocumentos = _context.Documentos.Where(i => i.ActividadId == actividad.Id).ToList();
-
-                    ActividadVm vm = new()
-                    {
-                        Id = actividad.Id,
-                        FechaAlta = actividad.FechaAlta,
-                        FechaInicio = actividad.FechaInicio,
-                        FechaFin = actividad.FechaFin,
-                        Titulo = actividad.Titulo,
-                        Texto = actividad.Texto,
-                        Mostrar = actividad.Mostrar,
-                        ImporteSocio = actividad.ImporteSocio != null ? Convert.ToDouble(actividad.ImporteSocio) : 0,
-                        ImporteNoSocio = actividad.ImporteNoSocio != null ? Convert.ToDouble(actividad.ImporteNoSocio) : 0,
-                        ImagenServidorBase64 = "data:image/png;base64," + base64ImageRepresentation,
-                        ListEnlaces = listEnlaces,
-                        ListDocumentos = listDocumentos
-                    };
-
-                    listVm.Add(vm);
-                }
-                return listVm;
-
-            }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex}");
