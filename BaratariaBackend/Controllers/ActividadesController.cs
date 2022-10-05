@@ -49,14 +49,7 @@ namespace BaratariaBackend.Controllers
                 List<ActividadVm> listVm = new();
                 List<Actividad> list = new();
 
-                if (portal == true)
-                {
-                    list = await _context.Actividades.Where(i => i.Mostrar == true).OrderByDescending(i => i.FechaAlta).ToListAsync();
-                }
-                else
-                {
-                    list = await _context.Actividades.OrderByDescending(i => i.FechaAlta).ToListAsync();
-                }
+                list = portal ? await _context.Actividades.Where(i => i.Mostrar == true).ToListAsync() : await _context.Actividades.ToListAsync();
 
                 foreach (Actividad actividad in list)
                 {
@@ -85,7 +78,7 @@ namespace BaratariaBackend.Controllers
 
                     listVm.Add(vm);
                 }
-                return listVm;
+                return listVm.OrderByDescending(i => i.FechaAlta).ToList();
 
             } 
             catch (Exception ex)

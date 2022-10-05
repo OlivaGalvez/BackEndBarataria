@@ -46,14 +46,7 @@ namespace BaratariaBackend.Controllers
             List<ConvenioVm> listVm = new();
             List<Convenio> list = new();
 
-            if (portal == true)
-            {
-                list = await _context.Convenios.Where(i => i.Mostrar == true).OrderByDescending(i => i.FechaAlta).ToListAsync();
-            }
-            else
-            {
-                list = await _context.Convenios.OrderByDescending(i => i.FechaAlta).ToListAsync();
-            }
+            list = portal ? await _context.Convenios.Where(i => i.Mostrar == true).ToListAsync() : await _context.Convenios.ToListAsync();
 
             foreach (Convenio convenio in list)
             {
@@ -79,7 +72,7 @@ namespace BaratariaBackend.Controllers
                 listVm.Add(vm);
             }
 
-            return listVm;
+            return listVm.OrderByDescending(i => i.FechaAlta).ToList();
         }
 
         // GET: api/Convenios/5
